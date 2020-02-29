@@ -510,7 +510,7 @@ public class Game {
       	score = ob.getScore(" ");
     	score.setScore(i--);
     	
-    	score = ob.getScore(ChatColor.AQUA +  "www.mcndjs.com");
+    	score = ob.getScore(ChatColor.AQUA +  "www.mcndsj.com");
     	score.setScore(i--);
     	for(GamePlayer gp : players){
     		gp.get().setScoreboard(board);
@@ -557,7 +557,7 @@ public class Game {
 					score = ob.getScore(" ");
 					score.setScore(0);
 
-					score = ob.getScore(ChatColor.AQUA +  "www.mcndjs.com");
+					score = ob.getScore(ChatColor.AQUA +  "www.mcndsj.com");
 					score.setScore(-1);
 
 					gp.get().setScoreboard(board);
