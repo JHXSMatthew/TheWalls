@@ -8,9 +8,7 @@ import com.github.JHXSMatthew.Main;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -85,23 +83,23 @@ public class SK_Paladin_6 extends SkillBasic {
 
     @Override
     protected void onInteract(PlayerInteractEvent evt) {
-        if(evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (last < System.currentTimeMillis()) {
                 if (evt.getItem() != null && evt.getItem().hasItemMeta() && evt.getItem().getItemMeta().getDisplayName().equals(SK_Paladin_1.itemName) && evt.getItem().getType() == Material.IRON_SWORD) {
-                    Block b = getPlayer().getTargetBlock((HashSet<Material>)null,32);
-                    if(b == null) {
+                    Block b = getPlayer().getTargetBlock((HashSet<Material>) null, 32);
+                    if (b == null) {
                         sendMessage("目标指向太远.");
                         return;
                     }
                     last = System.currentTimeMillis() + 1000 * 50;
                     GamePlayer owner = Main.getPc().getGamePlayer(getPlayer());
-                    for(Entity i : getPlayer().getWorld().getEntities()){
-                        if(i instanceof Player){
-                            if(owner.getTeam().isInTeam(Main.getPc().getGamePlayer((Player) i))){
+                    for (Entity i : getPlayer().getWorld().getEntities()) {
+                        if (i instanceof Player) {
+                            if (owner.getTeam().isInTeam(Main.getPc().getGamePlayer((Player) i))) {
                                 continue;
                             }
-                            if(i.getLocation().distanceSquared(b.getLocation()) < 5){
-                                ((Player) i).damage(getInnerLevel(),getPlayer());
+                            if (i.getLocation().distanceSquared(b.getLocation()) < 5) {
+                                ((Player) i).damage(getInnerLevel(), getPlayer());
                                 sendAffected((Player) i);
                             }
                         }

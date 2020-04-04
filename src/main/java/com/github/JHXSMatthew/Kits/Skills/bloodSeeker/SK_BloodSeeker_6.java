@@ -37,9 +37,9 @@ public class SK_BloodSeeker_6 extends SkillBasic {
 
     @Override
     protected void onDealDamage(EntityDamageByEntityEvent evt) {
-        if(evt.getEntity() instanceof LivingEntity){
-            if(random(100,10*getInnerLevel())){
-                ((LivingEntity) evt.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.WITHER,25,1));
+        if (evt.getEntity() instanceof LivingEntity) {
+            if (random(100, 10 * getInnerLevel())) {
+                ((LivingEntity) evt.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 25, 1));
                 getPlayer().sendMessage(ChatColor.AQUA + "撕裂伤口");
             }
         }

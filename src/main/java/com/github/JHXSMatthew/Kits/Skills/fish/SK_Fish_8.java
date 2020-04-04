@@ -17,22 +17,22 @@ import org.bukkit.potion.PotionEffectType;
 public class SK_Fish_8 extends SkillBasic {
 
 
-    private boolean triggered =false;
+    private boolean triggered = false;
+
     public SK_Fish_8(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Fish_8);
     }
 
 
-
     @Override
     protected void onDamaged(EntityDamageEvent evt) {
-        if(!triggered){
+        if (!triggered) {
             double current = getPlayer().getHealth();
-            if(current - evt.getFinalDamage() < 4 ){
-                getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,getInnerLevel(),1));
+            if (current - evt.getFinalDamage() < 4) {
+                getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, getInnerLevel(), 1));
                 triggered = true;
                 skillTriggered(null);
-                getPlayer().playSound(getPlayer().getLocation(), Sound.PISTON_RETRACT,1F,1F);
+                getPlayer().playSound(getPlayer().getLocation(), Sound.PISTON_RETRACT, 1F, 1F);
             }
         }
     }

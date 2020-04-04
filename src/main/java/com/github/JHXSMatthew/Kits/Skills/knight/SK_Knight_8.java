@@ -24,20 +24,19 @@ public class SK_Knight_8 extends SkillBasic {
     }
 
 
-
     @Override
     protected void onDamaged(EntityDamageEvent evt) {
-        if((evt.getFinalDamage()  >= getPlayer().getHealth() && time == 0) || time - System.currentTimeMillis() >= 0){
-            if(time ==0){
+        if ((evt.getFinalDamage() >= getPlayer().getHealth() && time == 0) || time - System.currentTimeMillis() >= 0) {
+            if (time == 0) {
                 time = System.currentTimeMillis() + 1000 * getInnerLevel();
                 skillTriggered(null);
-                getPlayer().playSound(getPlayer().getLocation(), Sound.HORSE_DEATH,1F,1F);
+                getPlayer().playSound(getPlayer().getLocation(), Sound.HORSE_DEATH, 1F, 1F);
             }
-            getPlayer().sendMessage(ChatColor.AQUA + "无敌时间剩余 " + (time - System.currentTimeMillis())/1000 + " 秒");
+            getPlayer().sendMessage(ChatColor.AQUA + "无敌时间剩余 " + (time - System.currentTimeMillis()) / 1000 + " 秒");
             evt.setCancelled(true);
-            if(evt instanceof EntityDamageByEntityEvent){
-                if(((EntityDamageByEntityEvent) evt).getDamager() instanceof Player){
-                    ((Player) ((EntityDamageByEntityEvent) evt).getDamager()).playSound(((EntityDamageByEntityEvent) evt).getDamager().getLocation(),Sound.HORSE_ARMOR,1F,1F);
+            if (evt instanceof EntityDamageByEntityEvent) {
+                if (((EntityDamageByEntityEvent) evt).getDamager() instanceof Player) {
+                    ((Player) ((EntityDamageByEntityEvent) evt).getDamager()).playSound(((EntityDamageByEntityEvent) evt).getDamager().getLocation(), Sound.HORSE_ARMOR, 1F, 1F);
                     ((EntityDamageByEntityEvent) evt).getDamager().sendMessage(ChatColor.RED + "坚不可摧效果生效中,您无法对" + getPlayer().getDisplayName() + "造成伤害!");
                 }
             }

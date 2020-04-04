@@ -20,7 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 public class SK_Archer_8 extends SkillBasic {
 
     public SK_Archer_8(KitBasic kit, int innerLevel) {
-        super(kit, innerLevel, SkillType.Archer_8 );
+        super(kit, innerLevel, SkillType.Archer_8);
     }
 
     @Override
@@ -45,12 +45,12 @@ public class SK_Archer_8 extends SkillBasic {
 
     @Override
     protected void onDealProjectileDamage(EntityDamageByEntityEvent evt) {
-        if(evt.getDamager() instanceof Arrow){
-            if(random(100,5*getInnerLevel())){
-                if(evt.getEntity() instanceof LivingEntity){
-                    ((LivingEntity)evt.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.WITHER,40,0));
+        if (evt.getDamager() instanceof Arrow) {
+            if (random(100, 5 * getInnerLevel())) {
+                if (evt.getEntity() instanceof LivingEntity) {
+                    ((LivingEntity) evt.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 40, 0));
                     getPlayer().sendMessage(ChatColor.AQUA + "涂毒射击!");
-                    evt.getEntity().getWorld().playSound(evt.getEntity().getLocation(), Sound.WITHER_IDLE,1F,1F);
+                    evt.getEntity().getWorld().playSound(evt.getEntity().getLocation(), Sound.WITHER_IDLE, 1F, 1F);
                 }
             }
         }

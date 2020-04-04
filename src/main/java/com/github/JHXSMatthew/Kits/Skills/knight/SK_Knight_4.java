@@ -20,15 +20,14 @@ public class SK_Knight_4 extends SkillBasic {
     }
 
 
-
     @Override
     protected void onDamaged(EntityDamageEvent evt) {
-        if(isOnHorse()){
+        if (isOnHorse()) {
             evt.setDamage(evt.getDamage() - evt.getDamage() * 0.03 * getInnerLevel());
         }
     }
 
-    private boolean isOnHorse(){
+    private boolean isOnHorse() {
         return getPlayer().getVehicle() != null && getPlayer().getVehicle().getType() == EntityType.HORSE;
     }
 

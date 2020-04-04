@@ -3,7 +3,7 @@ package com.github.JHXSMatthew.Kits.Skills.fish;
 import com.github.JHXSMatthew.Kits.KitBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
-import org.bukkit.*;
+import org.bukkit.Material;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -18,9 +18,8 @@ public class SK_Fish_1 extends SkillBasic {
 
     public SK_Fish_1(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Fish_1);
-        addItemWithSlot(0,new ItemStack(Material.RAW_FISH,10));
+        addItemWithSlot(0, new ItemStack(Material.RAW_FISH, 10));
     }
-
 
 
     @Override

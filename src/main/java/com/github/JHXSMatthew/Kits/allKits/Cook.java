@@ -2,11 +2,7 @@ package com.github.JHXSMatthew.Kits.allKits;
 
 import com.github.JHXSMatthew.Kits.KitBasic;
 import com.github.JHXSMatthew.Kits.KitType;
-import org.bukkit.Material;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 

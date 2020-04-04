@@ -25,28 +25,28 @@ public class SK_Cook_6 extends SkillBasic {
 
     @Override
     protected void onInteract(PlayerInteractEvent evt) {
-        if(evt.getAction() == Action.RIGHT_CLICK_BLOCK){
-            if(evt.getPlayer().getItemInHand() != null &&
+        if (evt.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (evt.getPlayer().getItemInHand() != null &&
                     !(evt.getPlayer().getItemInHand().getType().equals(Material.GOLD_HOE)
-                            ||evt.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_HOE)
-                            ||evt.getPlayer().getItemInHand().getType().equals(Material.IRON_HOE)
-                            ||evt.getPlayer().getItemInHand().getType().equals(Material.STONE_HOE)
-                            ||evt.getPlayer().getItemInHand().getType().equals(Material.WOOD_HOE)
-                        )){
+                            || evt.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_HOE)
+                            || evt.getPlayer().getItemInHand().getType().equals(Material.IRON_HOE)
+                            || evt.getPlayer().getItemInHand().getType().equals(Material.STONE_HOE)
+                            || evt.getPlayer().getItemInHand().getType().equals(Material.WOOD_HOE)
+                    )) {
                 return;
             }
-            if(evt.getClickedBlock()!= null && evt.getClickedBlock().getType() == Material.CROPS && evt.getClickedBlock().getData() != CropState.RIPE.getData()){
+            if (evt.getClickedBlock() != null && evt.getClickedBlock().getType() == Material.CROPS && evt.getClickedBlock().getData() != CropState.RIPE.getData()) {
                 short current = evt.getPlayer().getItemInHand().getDurability();
                 short max = evt.getPlayer().getItemInHand().getType().getMaxDurability();
 
-                if(current == 0 || current >= max - max/getInnerLevel()){
+                if (current == 0 || current >= max - max / getInnerLevel()) {
                     evt.getPlayer().sendMessage(ChatColor.AQUA + "耐久度不足.");
                     return;
                 }
-                evt.getPlayer().getItemInHand().setDurability((short)(current + max/getInnerLevel()));
+                evt.getPlayer().getItemInHand().setDurability((short) (current + max / getInnerLevel()));
                 evt.getClickedBlock().setData(CropState.RIPE.getData());
-                evt.getPlayer().playSound(getPlayer().getLocation(), Sound.LEVEL_UP,1F,1F);
-                evt.getPlayer().sendMessage(ChatColor.AQUA+"催熟成功!");
+                evt.getPlayer().playSound(getPlayer().getLocation(), Sound.LEVEL_UP, 1F, 1F);
+                evt.getPlayer().sendMessage(ChatColor.AQUA + "催熟成功!");
 
             }
         }

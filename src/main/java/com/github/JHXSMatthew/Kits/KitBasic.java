@@ -2,26 +2,17 @@ package com.github.JHXSMatthew.Kits;
 
 import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
-import com.github.JHXSMatthew.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 public abstract class KitBasic implements Listener {
-    private String name;
     protected int level = 1;
+    private String name;
     private KitType type;
     private UUID owner;
     private List<SkillBasic> skill;
@@ -40,15 +31,13 @@ public abstract class KitBasic implements Listener {
         }
     }
 
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public KitType getType() {
         return this.type;

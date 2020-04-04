@@ -16,9 +16,9 @@ import org.bukkit.inventory.ItemStack;
 public class SK_Archer_1 extends SkillBasic {
 
     public SK_Archer_1(KitBasic kit, int innerLevel) {
-        super(kit, innerLevel, SkillType.Archer_1 );
-        addItemWithSlot(0,new ItemStack(Material.BOW));
-        addItemWithSlot(1,new ItemStack(Material.ARROW,innerLevel * 5));
+        super(kit, innerLevel, SkillType.Archer_1);
+        addItemWithSlot(0, new ItemStack(Material.BOW));
+        addItemWithSlot(1, new ItemStack(Material.ARROW, innerLevel * 5));
     }
 
     @Override

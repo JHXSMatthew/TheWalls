@@ -14,11 +14,6 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Matthew on 15/07/2016.
@@ -30,26 +25,26 @@ public class SK_Paladin_1 extends SkillBasic {
     public SK_Paladin_1(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Paladin_1);
         int level = getInnerLevel();
-        ItemStack item = ItemFactory.create(Material.IRON_SWORD,(byte)0,itemName,"所有者: "+ ChatColor.RED + getPlayerName());
+        ItemStack item = ItemFactory.create(Material.IRON_SWORD, (byte) 0, itemName, "所有者: " + ChatColor.RED + getPlayerName());
         net.minecraft.server.v1_8_R3.ItemStack stack = CraftItemStack.asNMSCopy(item);
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setBoolean("Unbreakable",true);
+        nbt.setBoolean("Unbreakable", true);
         stack.setTag(nbt);
         item = CraftItemStack.asCraftMirror(stack);
 
 
-        if(level >= 1){
-            item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL,1);
+        if (level >= 1) {
+            item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
         }
-        if(level >= 2){
-            item.addUnsafeEnchantment(Enchantment.KNOCKBACK,1);
+        if (level >= 2) {
+            item.addUnsafeEnchantment(Enchantment.KNOCKBACK, 1);
         }
-        if(level >= 3){
-            item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL,2);
+        if (level >= 3) {
+            item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 2);
         }
 
         addUnDroppable(item);
-        addItemWithSlot(0,item);
+        addItemWithSlot(0, item);
     }
 
 

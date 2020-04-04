@@ -5,7 +5,6 @@ import com.github.JHXSMatthew.Main;
 import com.github.JHXSMatthew.Utils.MathUtils;
 import com.github.JHXSMatthew.Utils.Randomizer.IRandomizer;
 import com.github.JHXSMatthew.Utils.StringUtils;
-
 import com.github.JHXSMatthew.event.GameEndEvent;
 import com.github.JHXSMatthew.event.GameStartEvent;
 import lombok.Getter;

@@ -4,21 +4,13 @@ import com.github.JHXSMatthew.Kits.KitBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
 import com.github.JHXSMatthew.Main;
-import com.github.JHXSMatthew.Utils.ItemFactory;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 /**
  * Created by Matthew on 15/07/2016.
@@ -36,21 +28,21 @@ public class SK_Paladin_4 extends SkillBasic {
 
 
     @EventHandler
-    public void onFriendlyDamaged(EntityDamageByEntityEvent evt){
-        if(evt.getDamager() instanceof Player && evt.getEntity() instanceof Player){
-            if(evt.getDamager().equals(getPlayer())) {
-                if(((Player) evt.getDamager()).getItemInHand() != null && ((Player) evt.getDamager()).getItemInHand().getType() == Material.IRON_SWORD && ((Player) evt.getDamager()).getItemInHand().hasItemMeta() && ((Player) evt.getDamager()).getItemInHand().getItemMeta().getDisplayName().equals(SK_Paladin_1.itemName)){
+    public void onFriendlyDamaged(EntityDamageByEntityEvent evt) {
+        if (evt.getDamager() instanceof Player && evt.getEntity() instanceof Player) {
+            if (evt.getDamager().equals(getPlayer())) {
+                if (((Player) evt.getDamager()).getItemInHand() != null && ((Player) evt.getDamager()).getItemInHand().getType() == Material.IRON_SWORD && ((Player) evt.getDamager()).getItemInHand().hasItemMeta() && ((Player) evt.getDamager()).getItemInHand().getItemMeta().getDisplayName().equals(SK_Paladin_1.itemName)) {
                     if (Main.getPc().getGamePlayer((Player) evt.getDamager()).getTeam().isInTeam(Main.getPc().getGamePlayer((Player) evt.getEntity()))) {
-                        if(last < System.currentTimeMillis()){
+                        if (last < System.currentTimeMillis()) {
                             last = System.currentTimeMillis() + 1000 * 30;
                             double current = ((Player) evt.getEntity()).getHealth();
-                            if(current + getInnerLevel()  + 3 >= ((Player) evt.getEntity()).getMaxHealth()){
+                            if (current + getInnerLevel() + 3 >= ((Player) evt.getEntity()).getMaxHealth()) {
                                 ((Player) evt.getEntity()).setHealth(((Player) evt.getEntity()).getMaxHealth());
-                            }else{
-                                ((Player) evt.getEntity()).setHealth(current + getInnerLevel()  + 3 );
+                            } else {
+                                ((Player) evt.getEntity()).setHealth(current + getInnerLevel() + 3);
                             }
                             skillTriggered((Player) evt.getEntity());
-                        }else{
+                        } else {
                             sendNotYet(last);
                         }
                     }

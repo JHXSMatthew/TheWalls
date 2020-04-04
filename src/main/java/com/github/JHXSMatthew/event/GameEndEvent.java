@@ -6,14 +6,14 @@ import org.bukkit.event.HandlerList;
 /**
  * Created by Matthew on 2016/5/21.
  */
-public final class GameEndEvent extends Event{
+public final class GameEndEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

@@ -11,21 +11,21 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 public class BungeeController implements Listener {
 
-	
-	public void quitSend(Player p){
-		 ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		  out.writeUTF(p.getName());
-		  p.sendPluginMessage(Main.get(), "LobbyConnect", out.toByteArray());
-	}
-	
-	@EventHandler
-	public void motdChanger(ServerListPingEvent evt){
-		if(Main.getGc().getGame() == null){
-			evt.setMotd(ChatColor.RED + "游戏中");
-			return;
-		}
-		
-		evt.setMotd(Main.getGc().getGame().getGameStateString());
-		
-	}
+
+    public void quitSend(Player p) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF(p.getName());
+        p.sendPluginMessage(Main.get(), "LobbyConnect", out.toByteArray());
+    }
+
+    @EventHandler
+    public void motdChanger(ServerListPingEvent evt) {
+        if (Main.getGc().getGame() == null) {
+            evt.setMotd(ChatColor.RED + "游戏中");
+            return;
+        }
+
+        evt.setMotd(Main.getGc().getGame().getGameStateString());
+
+    }
 }

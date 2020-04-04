@@ -82,17 +82,17 @@ public class SK_BloodSeeker_1 extends SkillBasic {
     protected void onKillEntity(EntityDeathEvent evt) {
         double after = getPlayer().getHealth() + getInnerLevel() * 2;
 
-            if (after > getPlayer().getMaxHealth()) {
-                getPlayer().setHealth(getPlayer().getMaxHealth());
-            } else {
-                try {
-                  getPlayer().setHealth(after);
-                }catch(Exception e){
-                    System.err.println("Try to set health to " + after);
-                }
+        if (after > getPlayer().getMaxHealth()) {
+            getPlayer().setHealth(getPlayer().getMaxHealth());
+        } else {
+            try {
+                getPlayer().setHealth(after);
+            } catch (Exception e) {
+                System.err.println("Try to set health to " + after);
             }
+        }
 
-        getPlayer().playSound(getPlayer().getLocation(), Sound.WOLF_HURT,1F,1F);
+        getPlayer().playSound(getPlayer().getLocation(), Sound.WOLF_HURT, 1F, 1F);
         getPlayer().sendMessage(ChatColor.AQUA + "嗜血狂魔!");
     }
 

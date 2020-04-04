@@ -16,7 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -29,7 +28,7 @@ public class Main extends JavaPlugin {
     public static Main instance;
 
     public static String pluginName = "TheWalls";
-
+    public static Config c;
     private static GameController gc;
     private static WorldController wc;
     private static MapController mc;
@@ -41,21 +40,14 @@ public class Main extends JavaPlugin {
     private static ItemController ic;
     private static GUIController guic;
     private static MySQLController sql;
-
     private static SelectEvent se = null;
-
-    private GameMap setMap = null;
-
-    public static Config c;
+    private static BungeeController bungee;
 
 //	SignEvent sign = new SignEvent(this);
-
-    private static BungeeController bungee;
     public ChestControl chest = new ChestControl(this);
-
-
     boolean bc = false;
     Logger logger = Logger.getLogger("Minecraft");
+    private GameMap setMap = null;
 
     public static com.github.JHXSMatthew.Config.Config getCon() {
         return c;
@@ -172,7 +164,7 @@ public class Main extends JavaPlugin {
             getServer().getPluginManager().registerEvents(bungee, this);
             getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
             getServer().getMessenger().registerOutgoingPluginChannel(this, "LobbyConnect");
-            
+
         }
 
 

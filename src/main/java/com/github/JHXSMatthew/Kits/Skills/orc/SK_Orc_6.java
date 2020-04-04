@@ -3,7 +3,6 @@ package com.github.JHXSMatthew.Kits.Skills.orc;
 import com.github.JHXSMatthew.Kits.KitBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
-import org.bukkit.Material;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -12,7 +11,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 /**
  * Created by Matthew on 15/07/2016.
  */
-public class SK_Orc_6 extends SkillBasic{
+public class SK_Orc_6 extends SkillBasic {
     public SK_Orc_6(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Orc_6);
     }
@@ -34,11 +33,10 @@ public class SK_Orc_6 extends SkillBasic{
 
     @Override
     protected void onDealDamage(EntityDamageByEntityEvent evt) {
-        if(getPlayer().getItemInHand() != null && getPlayer().getItemInHand().getType().toString().contains("PICKAXE")){
+        if (getPlayer().getItemInHand() != null && getPlayer().getItemInHand().getType().toString().contains("PICKAXE")) {
             evt.setDamage(evt.getDamage() + evt.getDamage() * 0.1 * getInnerLevel());
         }
     }
-
 
 
     @Override

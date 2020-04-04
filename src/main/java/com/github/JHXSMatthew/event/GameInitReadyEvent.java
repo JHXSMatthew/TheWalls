@@ -6,17 +6,18 @@ import org.bukkit.event.HandlerList;
 /**
  * Created by Matthew on 2016/5/21.
  */
-public final class GameInitReadyEvent extends Event{
+public final class GameInitReadyEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    public GameInitReadyEvent(){
+    public GameInitReadyEvent() {
         System.out.println("GameEvent -> GameInitReadyEvent fired!!!!!");
-    }
-    public HandlerList getHandlers() {
-        return handlers;
     }
 
     public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

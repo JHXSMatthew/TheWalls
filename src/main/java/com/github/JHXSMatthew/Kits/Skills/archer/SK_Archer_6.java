@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 public class SK_Archer_6 extends SkillBasic {
 
     public SK_Archer_6(KitBasic kit, int innerLevel) {
-        super(kit, innerLevel, SkillType.Archer_6 );
+        super(kit, innerLevel, SkillType.Archer_6);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class SK_Archer_6 extends SkillBasic {
 
     @Override
     protected void onDealProjectileDamage(EntityDamageByEntityEvent evt) {
-        if(evt.getDamager() instanceof Arrow){
+        if (evt.getDamager() instanceof Arrow) {
             evt.setDamage(evt.getDamage() * (1 + getInnerLevel() * 0.1));
         }
     }

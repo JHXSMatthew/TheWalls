@@ -20,7 +20,6 @@ public class SK_Knight_6 extends SkillBasic {
     }
 
 
-
     @Override
     protected void onDamaged(EntityDamageEvent evt) {
 
@@ -38,12 +37,12 @@ public class SK_Knight_6 extends SkillBasic {
 
     @Override
     protected void onDealDamage(EntityDamageByEntityEvent evt) {
-        if(isOnHorse()){
-            evt.setDamage(evt.getDamage() + evt.getDamage() *  getInnerLevel() * 0.05);
+        if (isOnHorse()) {
+            evt.setDamage(evt.getDamage() + evt.getDamage() * getInnerLevel() * 0.05);
         }
     }
 
-    private boolean isOnHorse(){
+    private boolean isOnHorse() {
         return getPlayer().getVehicle() != null && getPlayer().getVehicle().getType() == EntityType.HORSE;
     }
 

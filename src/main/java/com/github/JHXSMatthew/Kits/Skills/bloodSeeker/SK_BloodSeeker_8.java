@@ -37,12 +37,12 @@ public class SK_BloodSeeker_8 extends SkillBasic {
 
     @Override
     protected void onDealDamage(EntityDamageByEntityEvent evt) {
-        if(evt.getEntity() instanceof LivingEntity){
-            if(((LivingEntity) evt.getEntity()).getHealth() < 2* getInnerLevel()){
+        if (evt.getEntity() instanceof LivingEntity) {
+            if (((LivingEntity) evt.getEntity()).getHealth() < 2 * getInnerLevel()) {
                 evt.setDamage(2000);
-                getPlayer().getLocation().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_DEATH,1F,1F);
+                getPlayer().getLocation().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_DEATH, 1F, 1F);
                 getPlayer().sendMessage(ChatColor.RED + "血腥屠杀-秒杀");
-                if(evt.getEntity() instanceof Player)
+                if (evt.getEntity() instanceof Player)
                     evt.getEntity().sendMessage(ChatColor.RED + "血腥屠杀-秒杀");
             }
         }

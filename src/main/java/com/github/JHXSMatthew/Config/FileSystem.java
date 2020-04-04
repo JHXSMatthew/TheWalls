@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 
 public class FileSystem {
@@ -239,6 +238,10 @@ public class FileSystem {
         return config;
     }
 
+    public void setConfig(FileConfiguration config) {
+        this.config = config;
+    }
+
     public void save() {
         config.options().copyDefaults(true);
         try {
@@ -254,24 +257,16 @@ public class FileSystem {
         return FileDir;
     }
 
-
     public void setFileDir(File fileDir) {
         FileDir = fileDir;
     }
-
 
     public File getpFile() {
         return pFile;
     }
 
-
     public void setpFile(File pFile) {
         this.pFile = pFile;
-    }
-
-
-    public void setConfig(FileConfiguration config) {
-        this.config = config;
     }
 
 

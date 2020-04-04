@@ -23,6 +23,7 @@ public class SK_Enderman_6 extends SkillBasic {
     public SK_Enderman_6(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Enderman_6);
     }
+
     @Override
     protected void onDamaged(EntityDamageEvent evt) {
 
@@ -40,14 +41,14 @@ public class SK_Enderman_6 extends SkillBasic {
 
     @Override
     protected void onDealDamage(EntityDamageByEntityEvent evt) {
-        if(!(evt.getEntity() instanceof LivingEntity)){
+        if (!(evt.getEntity() instanceof LivingEntity)) {
             return;
         }
-        if(getPlayer().getItemInHand().getType().equals(Material.IRON_SWORD)){
-            if(random(100,5+3*getInnerLevel())){
-                ((LivingEntity) evt.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20,10));
-                evt.getEntity().getWorld().playEffect(((LivingEntity) evt.getEntity()).getEyeLocation(), Effect.SPELL , 0);
-                getPlayer().playSound(getPlayer().getLocation(), Sound.ENDERDRAGON_HIT,1F,1F);
+        if (getPlayer().getItemInHand().getType().equals(Material.IRON_SWORD)) {
+            if (random(100, 5 + 3 * getInnerLevel())) {
+                ((LivingEntity) evt.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 10));
+                evt.getEntity().getWorld().playEffect(((LivingEntity) evt.getEntity()).getEyeLocation(), Effect.SPELL, 0);
+                getPlayer().playSound(getPlayer().getLocation(), Sound.ENDERDRAGON_HIT, 1F, 1F);
                 getPlayer().sendMessage(ChatColor.AQUA + "粒子武器生效!");
             }
         }

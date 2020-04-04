@@ -3,12 +3,12 @@ package com.github.JHXSMatthew.Kits.Skills.orc;
 import com.github.JHXSMatthew.Kits.KitBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
-import org.bukkit.inventory.*;
 import org.bukkit.Material;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -64,7 +64,7 @@ public class SK_Orc_1 extends SkillBasic {
 
     @Override
     protected void onConsume(PlayerItemConsumeEvent evt) {
-        if(evt.getItem().getType() == Material.MILK_BUCKET){
+        if (evt.getItem().getType() == Material.MILK_BUCKET) {
             evt.setCancelled(true);
             evt.setItem(new ItemStack(Material.BUCKET));
         }
@@ -94,8 +94,8 @@ public class SK_Orc_1 extends SkillBasic {
     protected void onStart() {
         getPlayer().setMaxHealth(getInnerLevel() * 3);
         getPlayer().setHealth(getPlayer().getMaxHealth());
-        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW,Integer.MAX_VALUE,0));
-        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,Integer.MAX_VALUE,0));
+        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0));
+        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 0));
         skillTriggered(null);
     }
 }
