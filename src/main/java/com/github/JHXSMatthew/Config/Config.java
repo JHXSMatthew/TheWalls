@@ -5,6 +5,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {
 
+    // number of games to "stop" the server
+    // -1 will not restart
+    public static int GAME_TO_SHUTDOWN = 5;
+
     public static int wimMoney = 30;
     public static int killMoney = 5;
     public static int RealMoney = 2;

@@ -27,7 +27,6 @@ public class GamePlayer {
     private GameStats gs = null;
     private List<Location> fur = null;
     private List<String> trust = null;
-//	private List<String> trusted = null;
 
 
     public GamePlayer(Player arg1) {
@@ -176,18 +175,6 @@ public class GamePlayer {
             kit.dispose();
         }
     }
-
-/*	
-	public void addTrusted(String name){
-		trusted.add(name);
-	}
-	public boolean isTrusted(String name){
-		return trusted.contains(name);
-	}
-	public void removeTrusted(String name){
-		trusted.remove(name);
-	}
-*/
 
     public void openFurGUI() {
 

@@ -8,6 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import static com.github.JHXSMatthew.Config.Config.GAME_TO_SHUTDOWN;
+
 public class GameController {
     private Game currentGame = null;
     private int count = 0;
@@ -27,7 +29,7 @@ public class GameController {
 
 
     public boolean newGame() {
-        if (count > 5) {
+        if (count > GAME_TO_SHUTDOWN) {
             Bukkit.shutdown();
         } else {
             count++;
