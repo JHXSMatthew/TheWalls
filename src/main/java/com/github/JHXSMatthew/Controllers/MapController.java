@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class MapController {
 
-    List<String> mapList;
+    private List<String> mapList;
 
 
     public MapController() {
@@ -27,6 +27,10 @@ public class MapController {
         }
     }
 
+
+    public boolean hasMap(){
+        return mapList != null && mapList.size() > 0;
+    }
 
     public GameMap pickMap() {
         Random r = new Random();
