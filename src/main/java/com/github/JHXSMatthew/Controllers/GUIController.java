@@ -23,9 +23,9 @@ public class GUIController {
 		
 		teamChoose = Bukkit.createInventory(null, 9 , teamChoseString);
 		for(int i = 0 ; i < 4 ; i ++){
-			ItemStack wool = new ItemStack(Material.WOOL,0,Main.getMsg().phaseDyeCorlor(Main.getMsg().paseTeamName(i)).getData());
+			ItemStack wool = new ItemStack(Material.WOOL,0,Main.getMsg().parseDyeColor(Main.getMsg().parseTeamName(i)).getData());
 			ItemMeta meta = wool.getItemMeta();
-			meta.setDisplayName(Main.getMsg().paseTeamName(i));
+			meta.setDisplayName(Main.getMsg().parseTeamName(i));
 			wool.setItemMeta(meta);
 			teamChoose.setItem(i  + 1 , wool);
 		}

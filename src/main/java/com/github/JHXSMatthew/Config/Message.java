@@ -95,7 +95,7 @@ public class Message {
 		return store.get(key);
 	}
 	
-	public String paseTeamName(int i){
+	public String parseTeamName(int i){
 		switch(i){
 			case 0:
 				return ChatColor.RED + "红队";
@@ -130,7 +130,7 @@ public class Message {
 		return msg;
 	}
 	
-	public Color phaseCorlor(String name){
+	public Color parseColor(String name){
 		if(name.contains("红")){
 			return Color.RED;
 		}
@@ -148,7 +148,7 @@ public class Message {
 	}
 	
 	
-	public DyeColor phaseDyeCorlor(String name){
+	public DyeColor parseDyeColor(String name){
 		if(name.contains("红")){
 			return DyeColor.RED;
 		}

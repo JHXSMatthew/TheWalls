@@ -33,7 +33,7 @@ public class GameTeam {
 	
 	public void setName(String n){
 		name = n;
-		color = Main.getMsg().phaseCorlor(name);
+		color = Main.getMsg().parseColor(name);
 	}
 	
 	public String getName(){

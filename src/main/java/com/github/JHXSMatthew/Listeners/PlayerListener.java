@@ -305,16 +305,11 @@ public class PlayerListener implements Listener {
 			isAll = true;
 		}
 
-		String gp = Main.chat.getPrimaryGroup(evt.getPlayer());
-		String gpp = Main.chat.getGroupPrefix("",gp).replace("&", "§");
-		String pp = Main.chat.getPlayerPrefix(evt.getPlayer()).replace("&", "§");
-		String realMsg  = null;
-		if(pp.equals(gpp)){
-			realMsg=   pp + evt.getPlayer().getDisplayName() + ChatColor.GOLD + " >> " +ChatColor.GRAY + evt.getMessage();
-		}else{
-		    realMsg = gpp + pp + evt.getPlayer().getDisplayName() + ChatColor.GOLD + " >> " +ChatColor.GRAY + evt.getMessage();
-		}
-		
+
+
+
+        String realMsg = evt.getPlayer().getDisplayName() + ChatColor.GOLD + " >> " +ChatColor.GRAY + evt.getMessage();
+
 		
 		GamePlayer p = Main.getPc().getGamePlayer(evt.getPlayer());
 		GameTeam gt = p.getTeam();

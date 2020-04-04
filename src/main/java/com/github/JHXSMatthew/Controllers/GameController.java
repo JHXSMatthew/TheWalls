@@ -1,6 +1,5 @@
 package com.github.JHXSMatthew.Controllers;
 
-import com.github.JHXSMatthew.BossBarSender;
 import com.github.JHXSMatthew.Game.Game;
 import com.github.JHXSMatthew.Game.GameMap;
 import com.github.JHXSMatthew.Main;
@@ -32,11 +31,7 @@ public class GameController {
 		}else{
 			count ++;
 		}
-		try{
-			BossBarSender.get().startSending();
-		}catch(Exception e){
-			
-		}
+
 		
 		try{
 			GameMap m = Main.getMc().pickMap();

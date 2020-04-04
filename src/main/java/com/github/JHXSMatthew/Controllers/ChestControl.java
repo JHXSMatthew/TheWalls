@@ -18,9 +18,9 @@ public class ChestControl {
 	HashMap<Integer,ItemStack> lucky = new HashMap<Integer,ItemStack>();
 	
 	
-	int index;
-	
-	int indexLucky;
+	private int index;
+    private int indexLucky;
+
 	public ChestControl(Main main){
 		this.plugin = main;
 		this.index = 0;

@@ -1,14 +1,14 @@
 package com.github.JHXSMatthew.Game;
 
-import com.github.JHXSMatthew.BossBarSender;
 import com.github.JHXSMatthew.Config.Config;
 import com.github.JHXSMatthew.Config.Message;
 import com.github.JHXSMatthew.Main;
 import com.github.JHXSMatthew.Objects.FireWorkUlt;
 import com.github.JHXSMatthew.Objects.Wall;
-import com.mcndsj.GameEvent.Events.GameEndEvent;
-import com.mcndsj.GameEvent.Events.GameInitReadyEvent;
-import com.mcndsj.GameEvent.Events.GameStartEvent;
+
+import com.github.JHXSMatthew.event.GameEndEvent;
+import com.github.JHXSMatthew.event.GameInitReadyEvent;
+import com.github.JHXSMatthew.event.GameStartEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -46,7 +46,7 @@ public class Game {
 		teams = new ArrayList<GameTeam>();
 		for(int i = 0 ; i < map.getSpanwPointsCount() ; i ++){
 			teams.add(new GameTeam(map.getSpawnPoints(i),false));
-			teams.get(i).setName(Main.getMsg().paseTeamName(i));
+			teams.get(i).setName(Main.getMsg().parseTeamName(i));
 		}
 		
 		
@@ -381,11 +381,6 @@ public class Game {
 				break;
 			case 2:
 				gameState = 2;
-				try{
-					BossBarSender.get().StopSending();
-				}catch(Exception e){
-					
-				}
 				
 				balanceTeam();
 				new BukkitRunnable(){
@@ -429,15 +424,15 @@ public class Game {
 				for(GamePlayer p : players){
 					if(!p.isSpec()){
 						p.getGs().addWin();
-						if(Main.economy != null){
-							 try{
-							 Main.economy.depositPlayer(Bukkit.getOfflinePlayer(p.get().getUniqueId()), null, Config.RealMoney);
-							 }catch (Exception e){
-								 Bukkit.getLogger().info("EXCEPTION WHILE DEPOSIT TO ID : " + p.get().getName());
-								 e.printStackTrace();
-							 }
-							 p.get().sendMessage(ChatColor.DARK_GREEN + "YourCraft >> " + ChatColor.WHITE + "恭喜您积极参与游戏，获得金币奖励 "+ChatColor.GOLD +   Config.RealMoney +".00 " + ChatColor.WHITE + " 枚!");
-						 }
+//						if(Main.economy != null){
+//							 try{
+//							 Main.economy.depositPlayer(Bukkit.getOfflinePlayer(p.get().getUniqueId()), null, Config.RealMoney);
+//							 }catch (Exception e){
+//								 Bukkit.getLogger().info("EXCEPTION WHILE DEPOSIT TO ID : " + p.get().getName());
+//								 e.printStackTrace();
+//							 }
+//							 p.get().sendMessage(ChatColor.DARK_GREEN + "YourCraft >> " + ChatColor.WHITE + "恭喜您积极参与游戏，获得金币奖励 "+ChatColor.GOLD +   Config.RealMoney +".00 " + ChatColor.WHITE + " 枚!");
+//						 }
 						
 						p.getGs().giveMoney(Config.wimMoney);
 						p.get().sendMessage(Message.prefix + Main.getMsg().getMessage("win-coin-earn1") + Config.wimMoney + Main.getMsg().getMessage("win-coin-earn2") );
