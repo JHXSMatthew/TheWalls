@@ -173,7 +173,7 @@ public class Main extends JavaPlugin {
 
     }
 
-
+    // 设置命令
     public boolean onCommand(CommandSender sender, Command cmd, String cl, String[] args) {
         if (!(sender instanceof Player)) {
             return false;
@@ -190,7 +190,7 @@ public class Main extends JavaPlugin {
         }
 
         Player p = (Player) sender;
-
+        // wall wand
         if (args[0].equals("wand")) {
             if (se == null) {
                 se = new SelectEvent();
@@ -199,14 +199,16 @@ public class Main extends JavaPlugin {
             se.getWand(p);
             p.sendMessage("wand done");
             return true;
-
         }
 
+        // wall start
+        // 直接开始游戏
         if (args[0].equals("start")) {
             gc.getGame().switchState(2);
             return true;
         }
 
+        // wall create <地图文件夹/世界名> <地图显示名>
         if (args[0].equals("create")) {
             if (args.length < 3) {
                 p.sendMessage("Wrong length!");
@@ -215,15 +217,16 @@ public class Main extends JavaPlugin {
             if (setMap != null) {
                 setMap.save();
                 setMap = new GameMap(args[1]);
-
             } else {
                 setMap = new GameMap(args[1]);
             }
+
             setMap.setDisplayName(args[2]);
             p.sendMessage("created!");
             return true;
 
         }
+        // wall builder <建筑师名>
         if (args[0].equals("builder")) {
             if (args.length < 2) {
                 p.sendMessage("Wrong length!");
@@ -237,7 +240,7 @@ public class Main extends JavaPlugin {
             p.sendMessage("fucking empty");
             return false;
         }
-
+        // wall bound 拿斧子左键右键标记一个地图区域 对角标记
         if (args[0].equals("bound")) {
             setMap.setBound(se.left.clone(), se.right.clone());
 
@@ -246,7 +249,7 @@ public class Main extends JavaPlugin {
             se.clear();
             return true;
         }
-
+        // wall wall 斧子对角标记墙后输入这个
         if (args[0].equals("wall")) {
             setMap.addWall(new Wall(se.left.clone(), se.right.clone()));
             p.sendMessage(se.left.toString());
@@ -255,13 +258,14 @@ public class Main extends JavaPlugin {
             p.sendMessage("wall : " + setMap.getWalls().size());
             return true;
         }
-
+        // wall spawn 4个出升点，连输4次哦
         if (args[0].equals("spawn")) {
             setMap.addSpawnPoints(p.getLocation());
             p.sendMessage("count " + setMap.getSpanwPointsCount());
             return true;
         }
 
+        // wall player <玩家数量>
         if (args[0].equals("player")) {
             if (args.length < 2) {
                 p.sendMessage("Wrong length!");
@@ -273,6 +277,7 @@ public class Main extends JavaPlugin {
             return true;
         }
 
+        // wall walltime 墙倒时间
         if (args[0].equals("walltime")) {
             if (args.length < 2) {
                 p.sendMessage("Wrong length!");
@@ -284,6 +289,7 @@ public class Main extends JavaPlugin {
             return true;
         }
 
+        // wall percentage 鬼知道是什么
         if (args[0].equals("percentage")) {
             if (args.length < 2) {
                 p.sendMessage("Wrong length!");
@@ -295,14 +301,14 @@ public class Main extends JavaPlugin {
             return true;
         }
 
-
+        // wall lobby 设置大厅
         if (args[0].equals("lobby")) {
             c.lobby = p.getLocation();
             p.sendMessage(c.lobby.toString());
             return true;
         }
 
-
+        // wall save 保存
         if (args[0].equals("save")) {
             setMap.save();
 

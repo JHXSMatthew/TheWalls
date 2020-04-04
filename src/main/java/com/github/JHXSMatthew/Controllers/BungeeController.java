@@ -26,6 +26,5 @@ public class BungeeController implements Listener {
         }
 
         evt.setMotd(Main.getGc().getGame().getGameStateString());
-
     }
 }

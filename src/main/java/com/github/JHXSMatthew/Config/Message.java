@@ -86,6 +86,9 @@ public class Message {
         store.put("not-trust-fur", ChatColor.YELLOW + "熔炉主人尚未给您权限.您可以叫他使用左键点击熔炉给予您权限。");
         store.put("too-much-fur", ChatColor.YELLOW + "您同时拥有的熔炉太多了，该熔炉将不会受到保护!");
         store.put("fur-place-success", ChatColor.YELLOW + "熔炉保护成功,您可以左键点击熔炉给予队友开启权限.");
+
+        store.put("msg-no-map", "未设置任何战墙地图，插件进入配置模式。 只有OP才可以使用命令配置。");
+        store.put("msg-no-lobby", "你需要一个名字叫lobby的世界来作为你的大厅.");
     }
 
     public String getMessage(String key) {

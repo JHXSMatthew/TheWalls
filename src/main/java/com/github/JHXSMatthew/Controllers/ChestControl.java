@@ -32,7 +32,6 @@ public class ChestControl {
         meta.addEnchant(Enchantment.FIRE_ASPECT, 1, false);
         addItem(Material.WOOD_SWORD, (short) 0, 1, meta);
 
-
         addItem(Material.DIAMOND, (short) 0, 1, null);
 
         addItem(Material.IRON_INGOT, (short) 0, 3, null);
