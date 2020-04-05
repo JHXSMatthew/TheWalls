@@ -1,65 +1,26 @@
-# The Walls Õ½Ç½
+# The Walls æˆ˜å¢™
 
-Ô­°æ±¾ÔÚwall_old·ÖÖ§£¬masterÎªÉçÇø¸Ä½ø°æ¡£
+åŽŸç‰ˆæœ¬åœ¨wall_oldåˆ†æ”¯ï¼Œmasterä¸ºç¤¾åŒºæ”¹è¿›ç‰ˆã€‚
 
-±í½á¹¹ÒÑ¾­Íü¼ÇÁË£¬ÓÐÖ¾Ö®Ê¿¿ÉÒÔ¸´Ô­Ò»ÏÂ¡£
+è¡¨ç»“æž„å·²ç»å¿˜è®°äº†ï¼Œæœ‰å¿—ä¹‹å£«å¯ä»¥å¤åŽŸä¸€ä¸‹ã€‚
 
-ÎÈ¶¨·ÖÖ§ master
+ç¨³å®šåˆ†æ”¯ master
 
-¿ª·¢·ÖÖ§ dev
+å¼€å‘åˆ†æ”¯ dev
 
-ÕýÔÚ³¢ÊÔ½«²å¼þËùÓÐÒÀÀµÒÆ³ý£¬Çå³ýÓëÀÏYC¿ò¼ÜµÄ¹ØÏµ¡£
+æ­£åœ¨å°è¯•å°†æ’ä»¶æ‰€æœ‰ä¾èµ–ç§»é™¤ï¼Œæ¸…é™¤ä¸Žè€YCæ¡†æž¶çš„å…³ç³»ã€‚
 
-## ÃüÁî
-¹ÜÀíÔ±ÃüÁî(OP)
+## å‘½ä»¤
+ç®¡ç†å‘˜å‘½ä»¤(OP)
 
-/wall start Ö±½Ó¿ªÊ¼µ±Ç°ÓÎÏ· ÎÞÊÓÈËÊýÏÞÖÆ
-
-
-## ´´½¨ÓÎÏ·Á÷³Ì
-ÉèÖÃÖ®Ç°½¨Òé¸ã¸ö¶àÊÀ½ç»¹ÊÇÊ²Ã´¶«Î÷µÄ£¬ÄÜ°ïÄãÔÚ²»Í¬ÊÀ½ç´«ËÍ£¬ÉèÖÃÍêÁËÒ»¶¨¼ÇµÃÉ¾ÁË¶àÊÀ½ç¡£
+/wall start ç›´æŽ¥å¼€å§‹å½“å‰æ¸¸æˆ æ— è§†äººæ•°é™åˆ¶
 
 
-Ê×ÏÈÄÃÒ»¸ö¸«Í·£¬Õâ¸ö¸«Í·×ó¼üÓÒ¼ü¿ÉÒÔ±ê¼Ç2¸öµã¡£
-/wall wand 
-
-µÚÒ»²½ÊÇ´´½¨Ò»¸öÓÎÏ·Ä£°å£¬/wall create <µØÍ¼ÎÄ¼þ¼Ð/ÊÀ½çÃû> <µØÍ¼ÏÔÊ¾Ãû>
-
-È»ºó/wall builder <½¨ÖþÊ¦Ãû> ÉèÖÃ½¨ÖþÊ¦µÄÃû×Ö¡£
-
-µÚ¶þ²½ÊÇÉèÖÃÓÎÏ·ÇøÓò£¬
-ÄÃ¸«×Ó±ê¼ÇÒ»¸öµØÍ¼ÇøÓò£¬Ö¸µÄÊÇÕû¸öÕ½Ç½µÄ×÷Õ½ÇøÓò¡£
-ÄÃ¸«×Ó×ó¼ü¶Ô½ÇÏßÒ»¶Ë£¬ÓÒ¼ü¶Ô½ÇÏßÁíÒ»¶Ë¡£
-ÎÒ¼ÇµÃÓÐ¸öWE modÍ¦ºÃÓÃµÄ ¿Í»§¶ËÄÜ¿´µ½ÇøÓò·¶Î§¡£
-
-/wall bound
-
-ÏÂÒ»²½ÊÇÉèÖÃÇ½£¬Í¬Àí¸«Í·×óÓÒ¼üÖ®ºó£¬
-/wall wall
-
-×Ü¹²ºÜ¶àÇ½£¬ÖØ¸´ÊäÈë¾ÍºÃ¡£
-
-ÏÂÒ»²½ÊÇÉèÖÃ³öÉúµã ÈËµ½µãºóÊä/wall spawn
-4¸ö¶ÓÎé4¸ö³öÉúµã
-
-È»ºóÊÇÉèÖÃÍæ¼ÒÊýÁ¿£¬±ØÐëÊÇ4µÄ±¶Êý¡£
-/wall player <Íæ¼ÒÊýÁ¿>
-
-È»ºóÊÇÇ½µ¹ËúÊ±¼ä
-/wall walltime <Ç½µ¹Ê±¼ä>
-
-/wall percentage <°Ù·Ö±È> ¹íÖªµÀÊÇÊ²Ã´ ÎÒÍü¼ÇÁË£¬Êä¸ö1.0×¼Ã»´í
-
-È»ºóÈËÅÜµ½´óÌüÈ¥£¬
-/wall lobby ÉèÖÃ´óÌü¡£
-
-×îºó/wall save ±£´æ¡£
-
-
-
-
-# ÆäËûÏîÄ¿
-ÆäËûÏîÄ¿¿ÉÒÔÔÚ www.mcndsj.com/projects ÕÒµ½¡£ ÈçÄúÓÐËùÐèµÄÎ´¿ªÔ´£¬ÇëÍ¨¹ýÈÎÒâÏà¹ØÏîÄ¿µÄGitHub issueÁªÏµÎÒ£¬»á½«¶ÔÓ¦ÏîÄ¿¿ªÔ´¡£
+## åˆ›å»ºæ¸¸æˆæµç¨‹
+1. æŠŠåœ°å›¾åç§°æ”¹ä¸ºworld,è¦†ç›–åŽŸworld
+2. å¯åŠ¨æœåŠ¡å™¨,åœ¨æ¸¸æˆå†…è¾“å…¥/wall å¼€å§‹è®¾ç½®åœºåœ°
+# å…¶ä»–é¡¹ç›®
+å…¶ä»–é¡¹ç›®å¯ä»¥åœ¨ www.mcndsj.com/projects æ‰¾åˆ°ã€‚ å¦‚æ‚¨æœ‰æ‰€éœ€çš„æœªå¼€æºï¼Œè¯·é€šè¿‡ä»»æ„ç›¸å…³é¡¹ç›®çš„GitHub issueè”ç³»æˆ‘ï¼Œä¼šå°†å¯¹åº”é¡¹ç›®å¼€æºã€‚
 
 # NOTICE
 
@@ -68,8 +29,8 @@ The code in this project may use untraceable third-party open source codes and m
 Please contact me through email 68638023@qq.com or submit an issue in GitHub repo and I will remove any illegal code from this project.
 I owe you my apologies.
 
-# ×¢Òâ
+# æ³¨æ„
 
-ÏîÄ¿ÄÚ¿ÉÄÜº¬ÓÐÎÞ·¨ÕÒÑ°À´Ô´µÄµÚÈý·½¿ªÔ´´úÂë£¬ÈçÊ¹ÓÃÓÐÎ¥·´¿ªÔ´Ð­Òé£¬ÇëÄúÖ±½ÓÍ¨¹ýÓÊ¼þ 68638023@qq.com »ò GitHub µÄ issue ÁªÏµÎÒ¡£ ÎÒ½«µÚÒ»Ê±¼ä½«Î¥¹æ´úÂë
-´ÓÏîÄ¿ÖÐÉ¾³ý£¬Éî±íÇ¸Òâ£¡
+é¡¹ç›®å†…å¯èƒ½å«æœ‰æ— æ³•æ‰¾å¯»æ¥æºçš„ç¬¬ä¸‰æ–¹å¼€æºä»£ç ï¼Œå¦‚ä½¿ç”¨æœ‰è¿åå¼€æºåè®®ï¼Œè¯·æ‚¨ç›´æŽ¥é€šè¿‡é‚®ä»¶ 68638023@qq.com æˆ– GitHub çš„ issue è”ç³»æˆ‘ã€‚ æˆ‘å°†ç¬¬ä¸€æ—¶é—´å°†è¿è§„ä»£ç 
+ä»Žé¡¹ç›®ä¸­åˆ é™¤ï¼Œæ·±è¡¨æ­‰æ„ï¼
 
