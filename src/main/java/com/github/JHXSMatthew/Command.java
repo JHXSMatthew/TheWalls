@@ -121,9 +121,10 @@ public class Command implements CommandExecutor {
             }
             if(s1.equalsIgnoreCase("spawn")){
                 setMap.addSpawnPoints(p.getLocation());
-                editor.setSpawn(editor.getSpawn()+1);
                 String team = Main.getMsg().parseTeamName(editor.getSpawn());
-                p.sendMessage("[§bTheWall§r]"+ChatColor.GREEN+"成功设置 "+team+" 队出声点");
+                editor.setSpawn(editor.getSpawn()+1);
+                p.sendMessage("[§bTheWall§r]"+ChatColor.GREEN+"成功设置 "+team+" §a队出声点");
+                editor.sendEditor(p);
                 return true;
             }
             if(s1.equalsIgnoreCase("lobby")){
