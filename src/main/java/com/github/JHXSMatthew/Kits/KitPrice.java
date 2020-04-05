@@ -6,21 +6,21 @@ import java.util.HashMap;
  * Created by Matthew on 2016/5/21.
  */
 public class KitPrice {
-    public static HashMap<KitType,int[]> map = null;
+    public static HashMap<KitType, int[]> map = null;
     public static int level = 11;
 
-    public static int query(KitType type, int level){
-        if(map == null)
+    public static int query(KitType type, int level) {
+        if (map == null)
             register();
 
         try {
             return map.get(type)[level];
-        }catch(Exception e){
+        } catch (Exception e) {
             return -1;
         }
     }
 
-    public static int getMax(KitType kitType){
+    public static int getMax(KitType kitType) {
         return level;
         /*
         if(map == null)
@@ -29,8 +29,8 @@ public class KitPrice {
         */
     }
 
-    public static void register(){
-        map =  new HashMap<KitType,int[]>();
+    public static void register() {
+        map = new HashMap<KitType, int[]>();
         /*
         add(KitType.bloodSeeker,1000,3000,5000);
         add(KitType.archer,1000,2800,5000);
@@ -46,12 +46,12 @@ public class KitPrice {
         add(KitType.appleFans,1000);
         add(KitType.philosopher,3000);
         */
-        add(KitType.cook,600,1000);
+        add(KitType.cook, 600, 1000);
 
     }
 
-    public static void add(KitType type,int ...value){
-        map.put(type,value);
+    public static void add(KitType type, int... value) {
+        map.put(type, value);
     }
 
 }

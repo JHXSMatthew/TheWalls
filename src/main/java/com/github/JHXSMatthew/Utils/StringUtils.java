@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
-    public static String calSkillPlaceHolders(String string, int level){
+    public static String calSkillPlaceHolders(String string, int level) {
         Pattern pattern = Pattern.compile("(@.+?@)");
-        string = string.replaceAll("level",String.valueOf(level));
+        string = string.replaceAll("level", String.valueOf(level));
         Matcher matcher = pattern.matcher(string);
         try {
             while (matcher.find()) {
@@ -22,10 +22,10 @@ public class StringUtils {
                 string = string.replace(ori, ChatColor.GREEN + String.valueOf(count) + ChatColor.GOLD);
                 //System.out.println("ori=" + ori + "count=" + count + "str=" + string);
             }
-            string = string.replace(ChatColor.GOLD + "%" , "%" + ChatColor.GOLD);
-        }catch(Exception e){
+            string = string.replace(ChatColor.GOLD + "%", "%" + ChatColor.GOLD);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return ChatColor.GOLD + string ;
+        return ChatColor.GOLD + string;
     }
 }

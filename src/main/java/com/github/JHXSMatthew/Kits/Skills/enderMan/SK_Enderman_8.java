@@ -9,10 +9,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.*;
-import org.bukkit.inventory.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -23,10 +23,11 @@ public class SK_Enderman_8 extends SkillBasic {
 
     ItemStack item;
     BukkitTask task;
+
     public SK_Enderman_8(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Enderman_8);
-        item = com.github.JHXSMatthew.Utils.ItemFactory.create(Material.COMPASS,(byte)0, ChatColor.DARK_PURPLE+ "末影追踪器", "右击指向最近敌人所在位置.","所有者: " + ChatColor.RED + getPlayerName());
-        addItemWithSlot(1,item);
+        item = com.github.JHXSMatthew.Utils.ItemFactory.create(Material.COMPASS, (byte) 0, ChatColor.DARK_PURPLE + "末影追踪器", "右击指向最近敌人所在位置.", "所有者: " + ChatColor.RED + getPlayerName());
+        addItemWithSlot(1, item);
         addUnDroppable(item);
 
     }
@@ -83,22 +84,22 @@ public class SK_Enderman_8 extends SkillBasic {
 
     @Override
     protected void onInteract(PlayerInteractEvent evt) {
-        if(evt.getItem() == null || evt.getItem().getType().equals(Material.AIR)){
+        if (evt.getItem() == null || evt.getItem().getType().equals(Material.AIR)) {
             return;
         }
-        if(evt.getItem().isSimilar(item)){
-            if(task == null){
-                task = new BukkitRunnable(){
+        if (evt.getItem().isSimilar(item)) {
+            if (task == null) {
+                task = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        for(Player p : Bukkit.getOnlinePlayers()){
-                            if(!Main.getPc().getGamePlayer(p.getPlayer()).getTeam().isInTeam(Main.getPc().getGamePlayer(getPlayer()))){
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (!Main.getPc().getGamePlayer(p.getPlayer()).getTeam().isInTeam(Main.getPc().getGamePlayer(getPlayer()))) {
                                 getPlayer().setCompassTarget(p.getLocation());
                                 break;
                             }
                         }
                     }
-                }.runTaskTimer(Main.get(),0,10);
+                }.runTaskTimer(Main.get(), 0, 10);
             }
         }
     }
@@ -122,7 +123,7 @@ public class SK_Enderman_8 extends SkillBasic {
     @Override
     public void dispose() {
         super.dispose();
-        if(task != null){
+        if (task != null) {
             task.cancel();
         }
     }

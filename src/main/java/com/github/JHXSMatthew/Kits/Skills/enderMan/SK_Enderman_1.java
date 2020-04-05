@@ -5,11 +5,11 @@ import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
 import org.bukkit.*;
 import org.bukkit.entity.Arrow;
-import org.bukkit.inventory.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Matthew on 5/06/2016.
@@ -27,12 +27,11 @@ public class SK_Enderman_1 extends SkillBasic {
 
     public SK_Enderman_1(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Enderman_1);
-        item = com.github.JHXSMatthew.Utils.ItemFactory.create(Material.SUGAR,(byte)0, ChatColor.DARK_PURPLE+ "末影", "右击记录当前位置", + (1+innerLevel*2) + "秒内可再次右击", "回到上次记录点." , "所有者: "+ ChatColor.RED + getPlayerName());
-        addItemWithSlot(0,item);
+        item = com.github.JHXSMatthew.Utils.ItemFactory.create(Material.SUGAR, (byte) 0, ChatColor.DARK_PURPLE + "末影", "右击记录当前位置", +(1 + innerLevel * 2) + "秒内可再次右击", "回到上次记录点.", "所有者: " + ChatColor.RED + getPlayerName());
+        addItemWithSlot(0, item);
         addUnDroppable(item);
-        duration = 1+innerLevel*2;
+        duration = 1 + innerLevel * 2;
     }
-
 
 
     @Override
@@ -47,8 +46,8 @@ public class SK_Enderman_1 extends SkillBasic {
 
     @Override
     protected void onEntityDamaged(EntityDamageByEntityEvent evt) {
-        if(evt.getDamager() instanceof Arrow){
-            if(System.currentTimeMillis() - last < 2000){
+        if (evt.getDamager() instanceof Arrow) {
+            if (System.currentTimeMillis() - last < 2000) {
                 evt.setDamage(0);
             }
         }
@@ -91,23 +90,23 @@ public class SK_Enderman_1 extends SkillBasic {
 
     @Override
     protected void onInteract(PlayerInteractEvent evt) {
-        if(evt.getItem() == null || evt.getItem().getType().equals(Material.AIR))
+        if (evt.getItem() == null || evt.getItem().getType().equals(Material.AIR))
             return;
-        if(evt.getItem().isSimilar(item)){
-            if( System.currentTimeMillis()  > last + (duration + coolDown) * 1000  || l == null){
+        if (evt.getItem().isSimilar(item)) {
+            if (System.currentTimeMillis() > last + (duration + coolDown) * 1000 || l == null) {
                 l = getPlayer().getLocation();
-                getPlayer().playSound(l, Sound.CLICK,1F,1F);
+                getPlayer().playSound(l, Sound.CLICK, 1F, 1F);
                 last = System.currentTimeMillis();
                 magic = true;
                 getPlayer().sendMessage(ChatColor.AQUA + "末影记录.");
-            }else if(System.currentTimeMillis() < last + duration * 1000   && magic){
-                getPlayer().getLocation().getWorld().playEffect(getPlayer().getLocation(), Effect.ENDER_SIGNAL,0);
-                getPlayer().getWorld().playSound(getPlayer().getLocation(),Sound.ENDERMAN_TELEPORT,1F,1F);
+            } else if (System.currentTimeMillis() < last + duration * 1000 && magic) {
+                getPlayer().getLocation().getWorld().playEffect(getPlayer().getLocation(), Effect.ENDER_SIGNAL, 0);
+                getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
                 getPlayer().teleport(l);
-                getPlayer().getWorld().playSound(getPlayer().getLocation(),Sound.ENDERMAN_TELEPORT,1F,1F);
+                getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
                 magic = false;
                 getPlayer().sendMessage(ChatColor.AQUA + "末影瞬移.");
-            }else{
+            } else {
                 sendNotYet(last);
             }
         }

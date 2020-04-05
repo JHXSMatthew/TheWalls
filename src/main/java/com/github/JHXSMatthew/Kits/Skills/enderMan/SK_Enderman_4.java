@@ -26,22 +26,23 @@ public class SK_Enderman_4 extends SkillBasic {
     public SK_Enderman_4(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Enderman_4);
     }
+
     @Override
     protected void onDamaged(EntityDamageEvent evt) {
-        if(evt.isCancelled()){
+        if (evt.isCancelled()) {
             return;
         }
         damaged = true;
 
-        if(reduce > 0){
-            if(getPlayer().getEquipment().getChestplate() != null && !getPlayer().getEquipment().getChestplate().getType().equals(Material.AIR)){
+        if (reduce > 0) {
+            if (getPlayer().getEquipment().getChestplate() != null && !getPlayer().getEquipment().getChestplate().getType().equals(Material.AIR)) {
                 reduce = 0;
                 getPlayer().sendMessage(ChatColor.AQUA + "检测到穿戴其他胸甲,粒子胸甲能量消失.");
                 return;
             }
-            reduce --;
-            getPlayer().getLocation().getWorld().playSound(getPlayer().getLocation(),Sound.ENDERMAN_STARE,0.5F,0.5F);
-            getPlayer().sendMessage(ChatColor.AQUA + "粒子胸甲能量剩余 " + ChatColor.GREEN + reduce + "/" +getInnerLevel());
+            reduce--;
+            getPlayer().getLocation().getWorld().playSound(getPlayer().getLocation(), Sound.ENDERMAN_STARE, 0.5F, 0.5F);
+            getPlayer().sendMessage(ChatColor.AQUA + "粒子胸甲能量剩余 " + ChatColor.GREEN + reduce + "/" + getInnerLevel());
             evt.setDamage(0);
 
         }
@@ -110,29 +111,29 @@ public class SK_Enderman_4 extends SkillBasic {
 
     @Override
     protected void onStart() {
-        timer = new BukkitRunnable(){
+        timer = new BukkitRunnable() {
             @Override
             public void run() {
-                if(reduce > 0)
+                if (reduce > 0)
                     return;
 
                 reduce = 0;
-                if(damaged)
+                if (damaged)
                     return;
-                if(getPlayer().getEquipment().getChestplate() == null || getPlayer().getEquipment().getChestplate().getType() == Material.AIR){
+                if (getPlayer().getEquipment().getChestplate() == null || getPlayer().getEquipment().getChestplate().getType() == Material.AIR) {
                     reduce = getInnerLevel();
                     getPlayer().sendMessage(ChatColor.AQUA + "粒子护甲生效!");
-                    getPlayer().playSound(getPlayer().getLocation(),Sound.BAT_HURT,1F,1F);
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.BAT_HURT, 1F, 1F);
                 }
 
             }
-        }.runTaskTimer(Main.get(),0,7 * 20);
+        }.runTaskTimer(Main.get(), 0, 7 * 20);
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        if(timer != null) {
+        if (timer != null) {
             timer.cancel();
         }
     }

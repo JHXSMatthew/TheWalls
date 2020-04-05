@@ -44,12 +44,12 @@ public class SK_Assassin_4 extends SkillBasic {
         LivingEntity victim = (LivingEntity) evt.getEntity();
 
         double q = victim.getLocation().getDirection().dot(getPlayer().getLocation().getDirection());
-        if (q > 0){
-           if(random(100,getInnerLevel() * 10)){
-               ((LivingEntity) evt.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,100,1));
-               getPlayer().sendMessage(ChatColor.AQUA + "背刺!");
-               getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_HURT,0.5F,0.5F);
-           }
+        if (q > 0) {
+            if (random(100, getInnerLevel() * 10)) {
+                ((LivingEntity) evt.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 1));
+                getPlayer().sendMessage(ChatColor.AQUA + "背刺!");
+                getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_HURT, 0.5F, 0.5F);
+            }
         }
 
     }

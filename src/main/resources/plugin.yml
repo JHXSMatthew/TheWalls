@@ -1,6 +1,6 @@
 name: TheWalls
 main: com.github.JHXSMatthew.Main
-depend: [GameEvent]
+depend: []
 version: 0.0.1-SNAPSHOT
 commands:
   walls:

@@ -4,7 +4,6 @@ import com.github.JHXSMatthew.Kits.KitBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
 import com.github.JHXSMatthew.Main;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
@@ -33,41 +32,41 @@ public class SK_Knight_1 extends SkillBasic {
     }
 
 
-    private void summon(){
+    private void summon() {
         try {
             if (getPlayer().getVehicle() != null) {
                 getPlayer().getVehicle().eject();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(h == null){
-            if(!h.isDead()){
+        if (h == null) {
+            if (!h.isDead()) {
                 h.remove();
             }
             h = null;
         }
         h = (Horse) getPlayer().getLocation().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.HORSE);
         h.setCustomName(getPlayer().getDisplayName() + "的战马");
-        h.setMetadata("HORSE", new FixedMetadataValue(Main.get(),getPlayer().getName()));
+        h.setMetadata("HORSE", new FixedMetadataValue(Main.get(), getPlayer().getName()));
         h.setMaxHealth(20 + 2 * getInnerLevel());
         h.setHealth(h.getMaxHealth());
         h.setAdult();
         h.setPassenger(getPlayer());
-        getPlayer().playSound(getPlayer().getLocation(), Sound.HORSE_ANGRY,1F,1F);
+        getPlayer().playSound(getPlayer().getLocation(), Sound.HORSE_ANGRY, 1F, 1F);
     }
 
     @EventHandler
-    public void onTriggerHorse(PlayerToggleSneakEvent evt){
-        if(evt.getPlayer().equals(getPlayer())){
-            if(h != null
+    public void onTriggerHorse(PlayerToggleSneakEvent evt) {
+        if (evt.getPlayer().equals(getPlayer())) {
+            if (h != null
                     && evt.getPlayer().getVehicle() != null
                     && evt.getPlayer().getVehicle().getType() == EntityType.HORSE
-                    ){
+            ) {
                 try {
                     h.getPassenger().getVehicle().eject();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 h.remove();
@@ -127,15 +126,15 @@ public class SK_Knight_1 extends SkillBasic {
 
     @Override
     protected void onInteract(PlayerInteractEvent evt) {
-        if(evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK){
-            if(evt.getItem() != null){
+        if (evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (evt.getItem() != null) {
                 ItemStack item = evt.getItem();
-                if(item.getType() == Material.SADDLE){
-                    if(coolDown < System.currentTimeMillis()){
+                if (item.getType() == Material.SADDLE) {
+                    if (coolDown < System.currentTimeMillis()) {
                         coolDown = System.currentTimeMillis() + 1000 * 300;
                         summon();
                         skillTriggered(null);
-                    }else{
+                    } else {
                         sendNotYet(coolDown);
                     }
                 }

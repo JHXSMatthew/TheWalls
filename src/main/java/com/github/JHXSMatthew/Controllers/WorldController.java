@@ -14,26 +14,26 @@ import java.util.Random;
 
 public class WorldController {
 
-	public World createEmptyWorld(String name) {
+    public World createEmptyWorld(String name) {
         WorldCreator worldCreator = new WorldCreator(name);
         worldCreator.environment(World.Environment.NORMAL);
         worldCreator.generateStructures(false);
         worldCreator.generator(new ChunkGenerator() {
             @Override
-        	public List<BlockPopulator> getDefaultPopulators(World world) {
+            public List<BlockPopulator> getDefaultPopulators(World world) {
                 return Arrays.asList(new BlockPopulator[0]);
             }
-            
+
             @Override
             public boolean canSpawn(World world, int x, int z) {
                 return true;
             }
-            
+
             @Override
             public byte[] generate(World world, Random random, int x, int z) {
                 return new byte[32768];
             }
-    
+
             @Override
             public Location getFixedSpawnLocation(World world, Random random) {
                 return new Location(world, 0.0D, 64.0D, 0.0D);
@@ -59,79 +59,79 @@ public class WorldController {
 
         Block b = world.getBlockAt(0, 20, 0);
         b.setType(Material.STONE);
-        
+
         return world;
     }
 
-	public boolean loadWorld(String worldName){
-		String isLobby = worldName.substring(0, Math.min(worldName.length(), 5));
-		WorldCreator worldCreator = new WorldCreator(worldName);
-		worldCreator.generateStructures(false);
+    public boolean loadWorld(String worldName) {
+        String isLobby = worldName.substring(0, Math.min(worldName.length(), 5));
+        WorldCreator worldCreator = new WorldCreator(worldName);
+        worldCreator.generateStructures(false);
         worldCreator.generator(new ChunkGenerator() {
             @Override
-        	public List<BlockPopulator> getDefaultPopulators(World world) {
+            public List<BlockPopulator> getDefaultPopulators(World world) {
                 return Arrays.asList(new BlockPopulator[0]);
             }
-            
+
             @Override
             public boolean canSpawn(World world, int x, int z) {
                 return true;
             }
-            
+
             @Override
             public byte[] generate(World world, Random random, int x, int z) {
                 return new byte[32768];
             }
-    
+
             @Override
             public Location getFixedSpawnLocation(World world, Random random) {
                 return new Location(world, 0.0D, 64.0D, 0.0D);
             }
         });
-		World world = worldCreator.createWorld();
+        World world = worldCreator.createWorld();
         world.setDifficulty(Difficulty.NORMAL);
         world.setSpawnFlags(true, true);
         if (isLobby.equalsIgnoreCase("lobby")) {
-        	world.setPVP(false);
+            world.setPVP(false);
         } else {
-        	world.setPVP(true);
+            world.setPVP(true);
         }
         world.setStorm(false);
         world.setThundering(false);
         world.setWeatherDuration(Integer.MAX_VALUE);
         world.setAutoSave(false);
         world.setKeepSpawnInMemory(false);
-	    world.setTicksPerAnimalSpawns(1);
-	    world.setTicksPerMonsterSpawns(1);
-        
+        world.setTicksPerAnimalSpawns(1);
+        world.setTicksPerMonsterSpawns(1);
+
         world.setGameRuleValue("doMobSpawning", "false");
         world.setGameRuleValue("mobGriefing", "false");
         world.setGameRuleValue("doFireTick", "false");
         world.setGameRuleValue("showDeathMessages", "false");
-        
+
         boolean loaded = false;
-        for(World w: Bukkit.getServer().getWorlds()) {
-          if(w.getName().equals(world.getName())) {
-            loaded = true;
-            break;
-          }
+        for (World w : Bukkit.getServer().getWorlds()) {
+            if (w.getName().equals(world.getName())) {
+                loaded = true;
+                break;
+            }
         }
         return loaded;
-	}
-	
-	public void unloadWorld(String w) {
-	    World world = Bukkit.getServer().getWorld(w);
-	    if(world != null) {
-	    	Bukkit.getServer().unloadWorld(world, true);
-	    }
-	}
+    }
 
-	public void copyWorld(File source, File target){
+    public void unloadWorld(String w) {
+        World world = Bukkit.getServer().getWorld(w);
+        if (world != null) {
+            Bukkit.getServer().unloadWorld(world, true);
+        }
+    }
+
+    public void copyWorld(File source, File target) {
         ArrayList<String> ignore = new ArrayList<String>(Arrays.asList("uid.dat", "session.dat"));
-        if(!ignore.contains(source.getName())) {
-            if(source.isDirectory()) {
-                if(!target.exists())
-                target.mkdirs();
+        if (!ignore.contains(source.getName())) {
+            if (source.isDirectory()) {
+                if (!target.exists())
+                    target.mkdirs();
                 String files[] = source.list();
                 for (String file : files) {
                     File srcFile = new File(source, file);
@@ -139,40 +139,40 @@ public class WorldController {
                     copyWorld(srcFile, destFile);
                 }
             } else {
-               try( InputStream in = new FileInputStream(source);
-                OutputStream out = new FileOutputStream(target);) {
+                try (InputStream in = new FileInputStream(source);
+                     OutputStream out = new FileOutputStream(target);) {
                     byte[] buffer = new byte[1024];
                     int length;
                     while ((length = in.read(buffer)) > 0)
                         out.write(buffer, 0, length);
                     in.close();
                     out.close();
-                }catch(IOException e){
+                } catch (IOException e) {
 
-               }
+                }
             }
         }
 
-	}
-	
-	public void deleteWorld(String name) {
-		unloadWorld(name);
-		File target = new File (Bukkit.getServer().getWorldContainer().getAbsolutePath(), name);
-		deleteWorld(target);
-	}
-	
-	public boolean deleteWorld(File path) {
-	      if(path.exists()) {
-	          File files[] = path.listFiles();
-	          for(int i=0; i<files.length; i++) {
-	              if(files[i].isDirectory()) {
-	                  deleteWorld(files[i]);
-	              } else {
-	                  files[i].delete();
-	              }
-	          }
-	      }
-	      return(path.delete());
-	}
-	
+    }
+
+    public void deleteWorld(String name) {
+        unloadWorld(name);
+        File target = new File(Bukkit.getServer().getWorldContainer().getAbsolutePath(), name);
+        deleteWorld(target);
+    }
+
+    public boolean deleteWorld(File path) {
+        if (path.exists()) {
+            File files[] = path.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
+                    deleteWorld(files[i]);
+                } else {
+                    files[i].delete();
+                }
+            }
+        }
+        return (path.delete());
+    }
+
 }

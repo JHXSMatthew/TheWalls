@@ -8,6 +8,7 @@ import java.util.Random;
 public class RealRandom implements IRandomizer {
 
     Random r = new Random();
+
     @Override
     public boolean random(int max, int chance) {
         return r.nextInt(max) < chance;

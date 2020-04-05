@@ -5,8 +5,8 @@ import com.github.JHXSMatthew.Main;
 import com.github.JHXSMatthew.Utils.MathUtils;
 import com.github.JHXSMatthew.Utils.Randomizer.IRandomizer;
 import com.github.JHXSMatthew.Utils.StringUtils;
-import com.mcndsj.GameEvent.Events.GameEndEvent;
-import com.mcndsj.GameEvent.Events.GameStartEvent;
+import com.github.JHXSMatthew.event.GameEndEvent;
+import com.github.JHXSMatthew.event.GameStartEvent;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -36,257 +36,266 @@ public abstract class SkillBasic implements Listener {
     private KitBasic kit;
     private int innerLevel = 0; // innerLevel!!!
     private SkillType type;
-    private HashMap<Integer, ItemStack> items = new HashMap<Integer,ItemStack>();
+    private HashMap<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
     private IRandomizer random = null;
     private List<ItemStack> undroppable = new ArrayList<ItemStack>();
 
-    public SkillBasic(KitBasic kit,int innerLevel,SkillType type){
+    public SkillBasic(KitBasic kit, int innerLevel, SkillType type) {
         this.kit = kit;
         this.innerLevel = innerLevel;
         this.type = type;
-        Main.get().getServer().getPluginManager().registerEvents(this,Main.get());
+        Main.get().getServer().getPluginManager().registerEvents(this, Main.get());
 
     }
 
-    protected boolean random(int max, int chance){
-        if(random == null)
+    protected boolean random(int max, int chance) {
+        if (random == null)
             random = MathUtils.getRandom();
-        return random.random(max,chance);
+        return random.random(max, chance);
     }
 
 
-    public void addItemWithSlot(int slot, ItemStack item){
+    public void addItemWithSlot(int slot, ItemStack item) {
         items.put(slot, item);
     }
 
-    public void giveStartItem(){
+    public void giveStartItem() {
         Player player = getPlayer();
-        for(Map.Entry<Integer, ItemStack> em : items.entrySet()){
+        for (Map.Entry<Integer, ItemStack> em : items.entrySet()) {
             player.getInventory().setItem(em.getKey(), em.getValue());
         }
     }
 
-    public void addUnDroppable(ItemStack item){
+    public void addUnDroppable(ItemStack item) {
         this.undroppable.add(item);
     }
 
-    public SkillType getType(){
+    public SkillType getType() {
         return this.type;
     }
 
-    public int getInnerLevel(){
+    public int getInnerLevel() {
         return innerLevel;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return kit.getPlayer();
     }
 
-    public String getPlayerName(){
+    public String getPlayerName() {
         return getPlayer().getName();
     }
 
-    public void dispose(){
+    public void dispose() {
         HandlerList.unregisterAll(this);
     }
 
-    public String getDescription(){
-        return ChatColor.GREEN + "- " +StringUtils.calSkillPlaceHolders(type.getDescription(),getInnerLevel());
+    public String getDescription() {
+        return ChatColor.GREEN + "- " + StringUtils.calSkillPlaceHolders(type.getDescription(), getInnerLevel());
     }
 
     /**
      * send skill names to each players
      */
-    protected void skillTriggered(Player p){
-        if(p != null){
+    protected void skillTriggered(Player p) {
+        if (p != null) {
             p.sendMessage(getPlayer().getDisplayName() + "对你释放了技能" + ChatColor.RED + getType().getSkillName());
         }
-        sendMessage(ChatColor.AQUA + "提示 >> "  + ChatColor.GRAY + getType().getSkillName() + "释放成功!");
+        sendMessage(ChatColor.AQUA + "提示 >> " + ChatColor.GRAY + getType().getSkillName() + "释放成功!");
 
     }
 
-    protected void sendAffected(Player p){
-        p.sendMessage(ChatColor.AQUA + "提示 >> " + ChatColor.GRAY + getPlayer().getDisplayName() + "对你释放了技能" + getType().getSkillName() +  ChatColor.GRAY + "!");
+    protected void sendAffected(Player p) {
+        p.sendMessage(ChatColor.AQUA + "提示 >> " + ChatColor.GRAY + getPlayer().getDisplayName() + "对你释放了技能" + getType().getSkillName() + ChatColor.GRAY + "!");
 
     }
 
 
     @EventHandler
-    public void onDrop(PlayerDropItemEvent evt){
-        for(ItemStack item : undroppable){
-            if(evt.getItemDrop().getItemStack().equals(item)){
+    public void onDrop(PlayerDropItemEvent evt) {
+        for (ItemStack item : undroppable) {
+            if (evt.getItemDrop().getItemStack().equals(item)) {
                 evt.setCancelled(true);
             }
         }
     }
 
 
-
     @EventHandler
-    public void onGameStart(GameStartEvent evt){
+    public void onGameStart(GameStartEvent evt) {
         giveStartItem();
         onStart();
     }
 
     @EventHandler
-    public void onGameEnd(GameEndEvent evt){
+    public void onGameEnd(GameEndEvent evt) {
         dispose();
     }
 
     @EventHandler
-    public void onKillEvent(PlayerDeathEvent evt){
-        if(evt.getEntity().getKiller() == null){
+    public void onKillEvent(PlayerDeathEvent evt) {
+        if (evt.getEntity().getKiller() == null) {
             return;
         }
-        if(evt.getEntity().getKiller().equals(getPlayer())){
+        if (evt.getEntity().getKiller().equals(getPlayer())) {
             onKill(evt);
         }
     }
 
     @EventHandler
-    public void onKillEntityEvent(EntityDeathEvent evt){
-        if(evt.getEntity().getKiller() == null){
+    public void onKillEntityEvent(EntityDeathEvent evt) {
+        if (evt.getEntity().getKiller() == null) {
             return;
         }
-        if(evt.getEntity().getKiller().equals(getPlayer())){
+        if (evt.getEntity().getKiller().equals(getPlayer())) {
             onKillEntity(evt);
         }
     }
 
-    protected void sendNotYet(long last){
-        getPlayer().sendMessage(ChatColor.GREEN + getType().getSkillName() + ChatColor.RED + ":冷却尚未结束,还有" + (last - System.currentTimeMillis())/1000 + "秒!");
+    protected void sendNotYet(long last) {
+        getPlayer().sendMessage(ChatColor.GREEN + getType().getSkillName() + ChatColor.RED + ":冷却尚未结束,还有" + (last - System.currentTimeMillis()) / 1000 + "秒!");
     }
 
-    protected void sendMessage(String message){
-        getPlayer().sendMessage(ChatColor.AQUA + getType().getSkillName() + " >> "+ ChatColor.GRAY + message);
+    protected void sendMessage(String message) {
+        getPlayer().sendMessage(ChatColor.AQUA + getType().getSkillName() + " >> " + ChatColor.GRAY + message);
     }
 
     @EventHandler
-    public void onInteractEvent(PlayerInteractEvent evt){
-        if(evt.getAction() != Action.PHYSICAL){
-            if(evt.getPlayer().equals(getPlayer())){
+    public void onInteractEvent(PlayerInteractEvent evt) {
+        if (evt.getAction() != Action.PHYSICAL) {
+            if (evt.getPlayer().equals(getPlayer())) {
                 onInteract(evt);
             }
         }
     }
 
     @EventHandler
-    public void onMake(CraftItemEvent evt){
-        if(evt.isCancelled()){
+    public void onMake(CraftItemEvent evt) {
+        if (evt.isCancelled()) {
             return;
         }
-        if(evt.getWhoClicked().equals(getPlayer())){
+        if (evt.getWhoClicked().equals(getPlayer())) {
             onCraft(evt);
         }
     }
 
     @EventHandler
-    public void onItemConsume(PlayerItemConsumeEvent evt){
-        if(evt.isCancelled()){
+    public void onItemConsume(PlayerItemConsumeEvent evt) {
+        if (evt.isCancelled()) {
             return;
         }
-        if(evt.getPlayer().equals(getPlayer())){
+        if (evt.getPlayer().equals(getPlayer())) {
             onConsume(evt);
         }
     }
 
     @EventHandler
-    public void onProjectileHitE(ProjectileHitEvent evt){
-        if(evt.getEntity().getShooter().equals(getPlayer())){
+    public void onProjectileHitE(ProjectileHitEvent evt) {
+        if (evt.getEntity().getShooter().equals(getPlayer())) {
             onProjectileHit(evt);
         }
     }
 
     @EventHandler
-    public void ProjectileLaunchEvent(ProjectileLaunchEvent evt){
-        if(evt.isCancelled()){
+    public void ProjectileLaunchEvent(ProjectileLaunchEvent evt) {
+        if (evt.isCancelled()) {
             return;
         }
-        if(evt.getEntity().getShooter().equals(getPlayer())){
+        if (evt.getEntity().getShooter().equals(getPlayer())) {
             onProjectileLaunch(evt);
         }
     }
 
 
     @EventHandler
-    public void onDamagedE(EntityDamageEvent evt){
-        if(evt.isCancelled()){
+    public void onDamagedE(EntityDamageEvent evt) {
+        if (evt.isCancelled()) {
             return;
         }
-        if(evt.getEntity().equals(getPlayer())){
+        if (evt.getEntity().equals(getPlayer())) {
             onDamaged(evt);
         }
     }
 
     @EventHandler
-    public void onEntityDamagedE(EntityDamageByEntityEvent evt){
-        if(evt.isCancelled()){
+    public void onEntityDamagedE(EntityDamageByEntityEvent evt) {
+        if (evt.isCancelled()) {
             return;
         }
-        if(evt.getEntity().equals(getPlayer())){
+        if (evt.getEntity().equals(getPlayer())) {
             onEntityDamaged(evt);
         }
     }
 
     @EventHandler
-    public void onBlockDamagedE(EntityDamageByBlockEvent evt){
-        if(evt.isCancelled()){
+    public void onBlockDamagedE(EntityDamageByBlockEvent evt) {
+        if (evt.isCancelled()) {
             return;
         }
-        if(evt.getEntity().equals(getPlayer())){
+        if (evt.getEntity().equals(getPlayer())) {
             onBlockDamaged(evt);
         }
     }
 
     @EventHandler
-    public void onDealDamagedE(EntityDamageByEntityEvent evt){
-        if(evt.isCancelled()){
+    public void onDealDamagedE(EntityDamageByEntityEvent evt) {
+        if (evt.isCancelled()) {
             return;
         }
-        if(evt.getDamager().equals(getPlayer())){
+        if (evt.getDamager().equals(getPlayer())) {
             onDealDamage(evt);
         }
     }
 
     @EventHandler
-    public void onDealDamageProdE(EntityDamageByEntityEvent evt){
-        if(evt.isCancelled()){
+    public void onDealDamageProdE(EntityDamageByEntityEvent evt) {
+        if (evt.isCancelled()) {
             return;
         }
-        if(evt.getDamager() instanceof Projectile && ((Projectile) evt.getDamager()).getShooter().equals(getPlayer())){
+        if (evt.getDamager() instanceof Projectile && ((Projectile) evt.getDamager()).getShooter().equals(getPlayer())) {
             onDealProjectileDamage(evt);
         }
     }
 
     @EventHandler
-    public void onFoodLevelChange(FoodLevelChangeEvent evt){
-        if(evt.isCancelled()){
+    public void onFoodLevelChange(FoodLevelChangeEvent evt) {
+        if (evt.isCancelled()) {
             return;
         }
-        if(evt.getEntity().equals(getPlayer())){
+        if (evt.getEntity().equals(getPlayer())) {
             onFoodLevelChanged(evt);
         }
     }
 
 
-
     //being damaged
     protected abstract void onDamaged(EntityDamageEvent evt);
+
     protected abstract void onBlockDamaged(EntityDamageByBlockEvent evt);
+
     protected abstract void onEntityDamaged(EntityDamageByEntityEvent evt);
 
     //damaged others
     protected abstract void onDealDamage(EntityDamageByEntityEvent evt);
+
     protected abstract void onDealProjectileDamage(EntityDamageByEntityEvent evt);
 
     protected abstract void onFoodLevelChanged(FoodLevelChangeEvent evt);
+
     protected abstract void onProjectileLaunch(ProjectileLaunchEvent evt);
+
     protected abstract void onProjectileHit(ProjectileHitEvent evt);
+
     protected abstract void onConsume(PlayerItemConsumeEvent evt);
+
     protected abstract void onCraft(CraftItemEvent evt);
+
     protected abstract void onInteract(PlayerInteractEvent evt);
+
     protected abstract void onKill(PlayerDeathEvent evt);
+
     protected abstract void onKillEntity(EntityDeathEvent evt);
+
     protected abstract void onStart();
 
 

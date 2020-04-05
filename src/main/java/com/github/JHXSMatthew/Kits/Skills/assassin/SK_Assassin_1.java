@@ -76,7 +76,7 @@ public class SK_Assassin_1 extends SkillBasic {
 
     @Override
     protected void onKill(PlayerDeathEvent evt) {
-        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,20 * getInnerLevel(),1));
+        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * getInnerLevel(), 1));
         getPlayer().sendMessage(ChatColor.AQUA + "获得速度提升!");
 
     }

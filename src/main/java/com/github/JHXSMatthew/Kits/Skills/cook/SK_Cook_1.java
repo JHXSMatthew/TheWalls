@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 public class SK_Cook_1 extends SkillBasic {
     public SK_Cook_1(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Cook_1);
-        addItemWithSlot(0,new ItemStack(Material.BREAD,innerLevel * 3));
+        addItemWithSlot(0, new ItemStack(Material.BREAD, innerLevel * 3));
         addItemWithSlot(1, new ItemStack(Material.CAKE, innerLevel));
     }
 

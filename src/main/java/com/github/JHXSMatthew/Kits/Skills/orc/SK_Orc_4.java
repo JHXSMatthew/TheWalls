@@ -5,10 +5,10 @@ import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
 import org.bukkit.Material;
 import org.bukkit.event.entity.*;
-import org.bukkit.inventory.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Matthew on 15/07/2016.
@@ -16,8 +16,8 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 public class SK_Orc_4 extends SkillBasic {
     public SK_Orc_4(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Orc_4);
-        addItemWithSlot(0,new ItemStack(Material.GOLDEN_APPLE));
-        addItemWithSlot(1,new ItemStack(Material.APPLE,getInnerLevel()));
+        addItemWithSlot(0, new ItemStack(Material.GOLDEN_APPLE));
+        addItemWithSlot(1, new ItemStack(Material.APPLE, getInnerLevel()));
     }
 
     @Override

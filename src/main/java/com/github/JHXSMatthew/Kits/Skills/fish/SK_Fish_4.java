@@ -23,7 +23,6 @@ public class SK_Fish_4 extends SkillBasic {
     }
 
 
-
     @Override
     protected void onDamaged(EntityDamageEvent evt) {
 
@@ -41,15 +40,15 @@ public class SK_Fish_4 extends SkillBasic {
 
     @Override
     protected void onDealDamage(EntityDamageByEntityEvent evt) {
-        ItemStack item  = getPlayer().getItemInHand();
-        if(item != null
+        ItemStack item = getPlayer().getItemInHand();
+        if (item != null
                 && (item.getType() == Material.RAW_FISH
 
-        )){
-            if(getRandom().random(100,10 + getInnerLevel())){
-                if(evt.getEntity() instanceof Player){
+        )) {
+            if (getRandom().random(100, 10 + getInnerLevel())) {
+                if (evt.getEntity() instanceof Player) {
                     skillTriggered((Player) evt.getEntity());
-                    getPlayer().getLocation().getWorld().playSound(getPlayer().getLocation(), Sound.GLASS,1F,1F);
+                    getPlayer().getLocation().getWorld().playSound(getPlayer().getLocation(), Sound.GLASS, 1F, 1F);
                     evt.getEntity().setVelocity(evt.getEntity().getLocation().getDirection().multiply(-1));
                 }
             }

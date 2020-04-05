@@ -35,14 +35,14 @@ public class SK_BloodSeeker_4 extends SkillBasic {
 
     @Override
     protected void onDealDamage(EntityDamageByEntityEvent evt) {
-        if(evt.isCancelled()){
+        if (evt.isCancelled()) {
             return;
         }
-        if(getPlayer().getItemInHand() != null && getPlayer().getItemInHand().getType().equals(Material.STONE_AXE)){
+        if (getPlayer().getItemInHand() != null && getPlayer().getItemInHand().getType().equals(Material.STONE_AXE)) {
             evt.setDamage(0);
             double diff = getPlayer().getMaxHealth() - getPlayer().getHealth();
             getPlayer().setHealth(getPlayer().getHealth() + diff * getInnerLevel() * 0.01);
-            getPlayer().getWorld().playEffect(getPlayer().getEyeLocation(), Effect.STEP_SOUND,Material.REDSTONE_WIRE);
+            getPlayer().getWorld().playEffect(getPlayer().getEyeLocation(), Effect.STEP_SOUND, Material.REDSTONE_WIRE);
         }
     }
 

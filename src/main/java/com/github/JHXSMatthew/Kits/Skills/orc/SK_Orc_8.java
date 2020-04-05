@@ -29,8 +29,8 @@ public class SK_Orc_8 extends SkillBasic {
 
     @Override
     protected void onEntityDamaged(EntityDamageByEntityEvent evt) {
-        if(evt.getDamager() instanceof Damageable){
-            ((Damageable) evt.getDamager()).damage(evt.getFinalDamage() * (0.05 + 0.01 * getInnerLevel()) , getPlayer());
+        if (evt.getDamager() instanceof Damageable) {
+            ((Damageable) evt.getDamager()).damage(evt.getFinalDamage() * (0.05 + 0.01 * getInnerLevel()), getPlayer());
         }
     }
 

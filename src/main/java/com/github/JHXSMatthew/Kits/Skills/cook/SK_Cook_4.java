@@ -5,11 +5,11 @@ import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Matthew on 24/05/2016.
@@ -22,12 +22,12 @@ public class SK_Cook_4 extends SkillBasic {
 
     @Override
     protected void onCraft(CraftItemEvent evt) {
-        if(evt.getCurrentItem().getType().isEdible() && random(100,30)){
+        if (evt.getCurrentItem().getType().isEdible() && random(100, 30)) {
             ItemStack item = evt.getCurrentItem();
             item.setAmount(evt.getCurrentItem().getAmount() * getInnerLevel());
             evt.setCurrentItem(item);
-            getPlayer().sendMessage(ChatColor.AQUA + "制作食物翻"+getInnerLevel()+"倍.");
-            getPlayer().playSound(getPlayer().getLocation(), Sound.FIREWORK_LAUNCH,0.5F,0.5F);
+            getPlayer().sendMessage(ChatColor.AQUA + "制作食物翻" + getInnerLevel() + "倍.");
+            getPlayer().playSound(getPlayer().getLocation(), Sound.FIREWORK_LAUNCH, 0.5F, 0.5F);
         }
     }
 

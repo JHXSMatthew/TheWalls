@@ -19,15 +19,15 @@ import java.util.UUID;
 public enum KitType {
 
 
-    cook(ItemFactory.create(Material.PORK,(byte)0,ChatColor.WHITE + "厨师","衣食无忧,天下太平."),"cook",Cook.class, SkillType.Cook_1,SkillType.Cook_4,SkillType.Cook_6,SkillType.Cook_8),
-    archer(ItemFactory.create(Material.BOW,(byte)0,ChatColor.WHITE + "弓箭手","以睹余物，皆丘山也."),"archer",Archer.class,SkillType.Archer_1,SkillType.Archer_4,SkillType.Archer_6,SkillType.Archer_8),
-    assassin(ItemFactory.create(Material.DIAMOND_SWORD,(byte)0,ChatColor.WHITE + "刺客","十步杀一人,千里不留情."),"assassin",Assassin.class,SkillType.Assassin_1,SkillType.Assassin_4,SkillType.Assassin_6,SkillType.Assassin_8),
-    enderman(ItemFactory.create(Material.ENDER_PORTAL_FRAME,(byte)0,ChatColor.WHITE + "末影使者","掌控世间粒子的运动规则"),"enderman",Enderman.class,SkillType.Enderman_1,SkillType.Enderman_4,SkillType.Enderman_6,SkillType.Enderman_8),
-    bloodSeeker(ItemFactory.create(Material.RED_ROSE,(byte)0, ChatColor.WHITE + "嗜血者","遇人杀人，遇佛弑佛."),"bloodSeeker",BloodSeeker.class,SkillType.BloodSeeker_1,SkillType.BloodSeeker_4,SkillType.BloodSeeker_6,SkillType.BloodSeeker_8),
-    fish(ItemFactory.create(Material.RAW_FISH,(byte)0, ChatColor.WHITE + "咸鱼","咸鱼翻身,鲤鱼打滚."),"fish",Fish.class,SkillType.Fish_1,SkillType.Fish_4,SkillType.Fish_6,SkillType.Fish_8),
-    knight(ItemFactory.create(Material.SADDLE,(byte)0, ChatColor.WHITE + "骑士","马到之处,寸草不生."),"knight",Fish.class,SkillType.Knight_1,SkillType.Knight_4,SkillType.Knight_6,SkillType.Knight_8),
-    orc(ItemFactory.create(Material.DIAMOND_CHESTPLATE,(byte)0, ChatColor.WHITE + "兽人","皮糙肉厚,行动笨拙."),"orc",Fish.class,SkillType.Orc_1,SkillType.Orc_4,SkillType.Orc_6,SkillType.Orc_8),
-    Paladin(ItemFactory.create(Material.IRON_SWORD,(byte)0, ChatColor.WHITE + "圣骑士","威武庄重,神圣青睐."),"paladin",Fish.class,SkillType.Paladin_1,SkillType.Paladin_4,SkillType.Paladin_6,SkillType.Paladin_8);
+    cook(ItemFactory.create(Material.PORK, (byte) 0, ChatColor.WHITE + "厨师", "衣食无忧,天下太平."), "cook", Cook.class, SkillType.Cook_1, SkillType.Cook_4, SkillType.Cook_6, SkillType.Cook_8),
+    archer(ItemFactory.create(Material.BOW, (byte) 0, ChatColor.WHITE + "弓箭手", "以睹余物，皆丘山也."), "archer", Archer.class, SkillType.Archer_1, SkillType.Archer_4, SkillType.Archer_6, SkillType.Archer_8),
+    assassin(ItemFactory.create(Material.DIAMOND_SWORD, (byte) 0, ChatColor.WHITE + "刺客", "十步杀一人,千里不留情."), "assassin", Assassin.class, SkillType.Assassin_1, SkillType.Assassin_4, SkillType.Assassin_6, SkillType.Assassin_8),
+    enderman(ItemFactory.create(Material.ENDER_PORTAL_FRAME, (byte) 0, ChatColor.WHITE + "末影使者", "掌控世间粒子的运动规则"), "enderman", Enderman.class, SkillType.Enderman_1, SkillType.Enderman_4, SkillType.Enderman_6, SkillType.Enderman_8),
+    bloodSeeker(ItemFactory.create(Material.RED_ROSE, (byte) 0, ChatColor.WHITE + "嗜血者", "遇人杀人，遇佛弑佛."), "bloodSeeker", BloodSeeker.class, SkillType.BloodSeeker_1, SkillType.BloodSeeker_4, SkillType.BloodSeeker_6, SkillType.BloodSeeker_8),
+    fish(ItemFactory.create(Material.RAW_FISH, (byte) 0, ChatColor.WHITE + "咸鱼", "咸鱼翻身,鲤鱼打滚."), "fish", Fish.class, SkillType.Fish_1, SkillType.Fish_4, SkillType.Fish_6, SkillType.Fish_8),
+    knight(ItemFactory.create(Material.SADDLE, (byte) 0, ChatColor.WHITE + "骑士", "马到之处,寸草不生."), "knight", Fish.class, SkillType.Knight_1, SkillType.Knight_4, SkillType.Knight_6, SkillType.Knight_8),
+    orc(ItemFactory.create(Material.DIAMOND_CHESTPLATE, (byte) 0, ChatColor.WHITE + "兽人", "皮糙肉厚,行动笨拙."), "orc", Fish.class, SkillType.Orc_1, SkillType.Orc_4, SkillType.Orc_6, SkillType.Orc_8),
+    Paladin(ItemFactory.create(Material.IRON_SWORD, (byte) 0, ChatColor.WHITE + "圣骑士", "威武庄重,神圣青睐."), "paladin", Fish.class, SkillType.Paladin_1, SkillType.Paladin_4, SkillType.Paladin_6, SkillType.Paladin_8);
 
 
     //,
@@ -48,55 +48,55 @@ public enum KitType {
     private ItemStack item;
     private SkillType[] skills;
 
-    KitType(ItemStack item, String DBName, Class<? extends KitBasic> clazz , SkillType ...type){
+    KitType(ItemStack item, String DBName, Class<? extends KitBasic> clazz, SkillType... type) {
         this.item = item;
         this.DBName = DBName;
         this.clazz = clazz;
         this.skills = type;
     }
 
-    public static KitType getType(String dbName){
-        for(KitType k : KitType.values()){
-            if(k.getDBName().equals(dbName)){
+    public static KitType getType(String dbName) {
+        for (KitType k : KitType.values()) {
+            if (k.getDBName().equals(dbName)) {
                 return k;
             }
         }
         return null;
     }
 
-    public String getDisplayName(){
+    public String getDisplayName() {
         return ChatColor.stripColor(item.getItemMeta().getDisplayName());
     }
 
-    public String getDisplayNameWithColor(){
+    public String getDisplayNameWithColor() {
         return item.getItemMeta().getDisplayName();
     }
 
-    public List<String> getLore(){
+    public List<String> getLore() {
         return item.getItemMeta().getLore();
     }
 
-    public Material getMaterial(){
+    public Material getMaterial() {
         return item.getType();
     }
 
-    public ItemStack getItem(){
+    public ItemStack getItem() {
         return item.clone();
     }
 
-    public SkillType[] getSkillTypes(){
+    public SkillType[] getSkillTypes() {
         return skills;
     }
 
-    public String getDBName(){
+    public String getDBName() {
         return DBName;
     }
 
-    public KitBasic getKit(Player owner,int level){
+    public KitBasic getKit(Player owner, int level) {
         KitBasic basic = null;
-        try{
-            basic = clazz.getDeclaredConstructor(UUID.class,int.class).newInstance(owner.getUniqueId(),level);
-        }catch (NoSuchMethodException e) {
+        try {
+            basic = clazz.getDeclaredConstructor(UUID.class, int.class).newInstance(owner.getUniqueId(), level);
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -108,17 +108,16 @@ public enum KitType {
         return basic;
     }
 
-    public List<String> getDescription(int level){
+    public List<String> getDescription(int level) {
         ArrayList<String> string = new ArrayList<>();
-        for(SkillType basic : skills){
-            if(basic.getUnlockLevel() > level){
+        for (SkillType basic : skills) {
+            if (basic.getUnlockLevel() > level) {
                 continue;
             }
-            basic.getDescription(level,string);
+            basic.getDescription(level, string);
         }
         return string;
     }
-
 
 
 }

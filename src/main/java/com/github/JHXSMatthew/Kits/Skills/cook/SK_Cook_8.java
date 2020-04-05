@@ -29,15 +29,15 @@ public class SK_Cook_8 extends SkillBasic {
         int current = evt.getFoodLevel();
         int old = getPlayer().getFoodLevel();
         int inc = current - old;
-        if(inc > 0){
-            if(random(100,10*getInnerLevel())){
+        if (inc > 0) {
+            if (random(100, 10 * getInnerLevel())) {
                 getPlayer().sendMessage(ChatColor.AQUA + "食神至尊,恢复饱食度!");
-                List<Entity> e = getPlayer().getNearbyEntities(10,10,10);
-                for(Entity p : e){
-                    if(p instanceof Player){
-                        if(Main.getPc().getGamePlayer((Player)p).getTeam().isInTeam(Main.get().getPc().getGamePlayer(getPlayer()))){
-                            ((Player) p).setFoodLevel(((Player) p).getFoodLevel() + inc > 20 ? 20 : ((Player) p).getFoodLevel()+inc);
-                            ((Player) p).playSound(p.getLocation(), Sound.EAT,1F,1F);
+                List<Entity> e = getPlayer().getNearbyEntities(10, 10, 10);
+                for (Entity p : e) {
+                    if (p instanceof Player) {
+                        if (Main.getPc().getGamePlayer((Player) p).getTeam().isInTeam(Main.get().getPc().getGamePlayer(getPlayer()))) {
+                            ((Player) p).setFoodLevel(((Player) p).getFoodLevel() + inc > 20 ? 20 : ((Player) p).getFoodLevel() + inc);
+                            ((Player) p).playSound(p.getLocation(), Sound.EAT, 1F, 1F);
                             p.sendMessage(ChatColor.AQUA + "受到来自队友 " + getPlayer().getName() + " 食神效果影响,恢复饱食度!");
                         }
                     }

@@ -4,7 +4,6 @@ import com.github.JHXSMatthew.Game.GamePlayer;
 import com.github.JHXSMatthew.Kits.KitPrice;
 import com.github.JHXSMatthew.Kits.KitType;
 import com.github.JHXSMatthew.Main;
-import com.github.JHXSMatthew.Utils.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -28,72 +27,73 @@ public class KitSelectorInventory implements Listener {
     GamePlayer owner;
     Inventory inv;
 
-    public KitSelectorInventory(GamePlayer gp){
+    public KitSelectorInventory(GamePlayer gp) {
         owner = gp;
-        Bukkit.getPluginManager().registerEvents(this,Main.get());
+        Bukkit.getPluginManager().registerEvents(this, Main.get());
     }
 
 
     @EventHandler
-    public void onClick(InventoryClickEvent evt){
-        if(!evt.getInventory().equals(inv)|| !evt.getWhoClicked().equals(owner.get())){
+    public void onClick(InventoryClickEvent evt) {
+        if (!evt.getInventory().equals(inv) || !evt.getWhoClicked().equals(owner.get())) {
             return;
         }
-        if(evt.getCurrentItem() == null || evt.getCurrentItem().getType() == Material.AIR){
+        if (evt.getCurrentItem() == null || evt.getCurrentItem().getType() == Material.AIR) {
             return;
         }
         evt.setCancelled(true);
-        for(KitType type : KitType.values()){
-            if(type.getDisplayNameWithColor().equals(evt.getCurrentItem().getItemMeta().getDisplayName())){
-                if(owner != null && owner.getKitLevels() != null && owner.getKitLevels().containsKey(type) && owner.getKitLevels().get(type) > 0){
-                    if(owner.getKit() != null)
+        for (KitType type : KitType.values()) {
+            if (type.getDisplayNameWithColor().equals(evt.getCurrentItem().getItemMeta().getDisplayName())) {
+                if (owner != null && owner.getKitLevels() != null && owner.getKitLevels().containsKey(type) && owner.getKitLevels().get(type) > 0) {
+                    if (owner.getKit() != null)
                         owner.getKit().dispose();
 
-                    owner.setKit(type.getKit(owner.get(),owner.getKitLevels().get(type)));
-                    owner.sendTitle(ChatColor.GREEN + "选择职业 "+ ChatColor.GOLD +type.getDisplayName() +"("+owner.getKitLevels().get(type)+")" + ChatColor.GREEN +  " 成功");
+                    owner.setKit(type.getKit(owner.get(), owner.getKitLevels().get(type)));
+                    owner.sendTitle(ChatColor.GREEN + "选择职业 " + ChatColor.GOLD + type.getDisplayName() + "(" + owner.getKitLevels().get(type) + ")" + ChatColor.GREEN + " 成功");
                     Main.getGc().getGame().updateScorebaordLobby(owner);
                     Main.getSql().setCurrentKit(owner);
                     owner.get().getPlayer().closeInventory();
                     break;
-                }else{
-                    owner.sendTitle(ChatColor.GREEN + "尚未拥有", ChatColor.YELLOW+ "在大厅通过代币可以购买升级该职业!");
+                } else {
+                    owner.sendTitle(ChatColor.GREEN + "尚未拥有", ChatColor.YELLOW + "在大厅通过代币可以购买升级该职业!");
                     owner.get().getPlayer().closeInventory();
                     break;
                 }
             }
         }
     }
+
     @EventHandler
-    public void closeEvent(InventoryCloseEvent evt){
-        if(evt.getInventory().equals(inv)){
+    public void closeEvent(InventoryCloseEvent evt) {
+        if (evt.getInventory().equals(inv)) {
             HandlerList.unregisterAll(this);
         }
     }
 
-    public void open(){
-        inv = Bukkit.createInventory(null,54,"选择职业");
+    public void open() {
+        inv = Bukkit.createInventory(null, 54, "选择职业");
         boolean allNull = false;
-        if(owner.getKitLevels() == null)
+        if (owner.getKitLevels() == null)
             allNull = true;
 
-        for(KitType type : KitType.values()){
-            if(allNull || !owner.getKitLevels().containsKey(type) || owner.getKitLevels().get(type) <= 0){
-                inv.addItem(fillInfo(type.getItem(),0, KitPrice.getMax(type), null));
-            }else{
-                inv.addItem(fillInfo(type.getItem(),owner.getKitLevels().get(type), KitPrice.getMax(type),type.getDescription(owner.getKitLevels().get(type))));
+        for (KitType type : KitType.values()) {
+            if (allNull || !owner.getKitLevels().containsKey(type) || owner.getKitLevels().get(type) <= 0) {
+                inv.addItem(fillInfo(type.getItem(), 0, KitPrice.getMax(type), null));
+            } else {
+                inv.addItem(fillInfo(type.getItem(), owner.getKitLevels().get(type), KitPrice.getMax(type), type.getDescription(owner.getKitLevels().get(type))));
             }
         }
         owner.get().openInventory(inv);
     }
 
 
-    private ItemStack fillInfo(ItemStack source, int current, int max, List<String> currentDes){
-        if(current == 0 || currentDes == null){
+    private ItemStack fillInfo(ItemStack source, int current, int max, List<String> currentDes) {
+        if (current == 0 || currentDes == null) {
             ItemMeta meta = source.getItemMeta();
             List<String> lore = meta.getLore();
             lore.add(" ");
             lore.add(ChatColor.YELLOW + "当前等级: " + ChatColor.GREEN + current);
-            lore.add(ChatColor.YELLOW + "最高等级: "  +ChatColor.GREEN + max);
+            lore.add(ChatColor.YELLOW + "最高等级: " + ChatColor.GREEN + max);
             lore.add(ChatColor.RED + "未拥有");
             meta.setLore(lore);
             source.setItemMeta(meta);
@@ -112,7 +112,7 @@ public class KitSelectorInventory implements Listener {
     }
 
 
-    private String getPlaceholder(String original){
+    private String getPlaceholder(String original) {
         Pattern pattern = Pattern.compile(".*(%.*%).*");
         Matcher matcher = pattern.matcher(original);
         matcher.matches();

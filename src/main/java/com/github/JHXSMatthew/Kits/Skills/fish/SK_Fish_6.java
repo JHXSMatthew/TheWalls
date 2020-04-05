@@ -1,17 +1,17 @@
 package com.github.JHXSMatthew.Kits.Skills.fish;
 
 import com.github.JHXSMatthew.Kits.KitBasic;
+import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
+import com.github.JHXSMatthew.Kits.Skills.SkillType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.inventory.*;
-import com.github.JHXSMatthew.Kits.Skills.SkillBasic;
-import com.github.JHXSMatthew.Kits.Skills.SkillType;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -22,10 +22,10 @@ public class SK_Fish_6 extends SkillBasic {
 
     private long last = 0;
     private long notifiedTime = 0;
+
     public SK_Fish_6(KitBasic kit, int innerLevel) {
         super(kit, innerLevel, SkillType.Fish_6);
     }
-
 
 
     @Override
@@ -80,20 +80,20 @@ public class SK_Fish_6 extends SkillBasic {
 
     @Override
     protected void onInteract(PlayerInteractEvent evt) {
-        if(evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK){
-            if(evt.getItem() != null){
+        if (evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (evt.getItem() != null) {
                 ItemStack item = evt.getItem();
-                if(item.getType() == Material.RAW_FISH){
-                    if(last < System.currentTimeMillis()){
+                if (item.getType() == Material.RAW_FISH) {
+                    if (last < System.currentTimeMillis()) {
                         last = System.currentTimeMillis() + 100 * 1000;
                         skillTriggered(null);
-                        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,20 * getInnerLevel(),0));
-                        getPlayer().playSound(getPlayer().getLocation(),Sound.SILVERFISH_KILL,1F,1F);
-                    }else{
-                        if(notifiedTime < System.currentTimeMillis()){
+                        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * getInnerLevel(), 0));
+                        getPlayer().playSound(getPlayer().getLocation(), Sound.SILVERFISH_KILL, 1F, 1F);
+                    } else {
+                        if (notifiedTime < System.currentTimeMillis()) {
                             notifiedTime = System.currentTimeMillis() + 5 * 1000;
-                            getPlayer().playSound(getPlayer().getLocation(), Sound.CLICK,1F,1F);
-                            getPlayer().sendMessage(ChatColor.RED + "冷却尚未结束,还需要" + ((last - System.currentTimeMillis())/1000) + "秒!" );
+                            getPlayer().playSound(getPlayer().getLocation(), Sound.CLICK, 1F, 1F);
+                            getPlayer().sendMessage(ChatColor.RED + "冷却尚未结束,还需要" + ((last - System.currentTimeMillis()) / 1000) + "秒!");
                         }
                     }
                 }
