@@ -1,24 +1,24 @@
 package com.github.JHXSMatthew;
 
-
 import com.github.JHXSMatthew.Config.Config;
 import com.github.JHXSMatthew.Config.Message;
 import com.github.JHXSMatthew.Controllers.*;
-import com.github.JHXSMatthew.Game.GameMap;
 import com.github.JHXSMatthew.Listeners.BlockListener;
 import com.github.JHXSMatthew.Listeners.GuiListener;
 import com.github.JHXSMatthew.Listeners.PlayerListener;
-import com.github.JHXSMatthew.Listeners.SelectEvent;
 import com.github.JHXSMatthew.Objects.NMS;
 import com.github.JHXSMatthew.Objects.NMSHandler;
-import com.github.JHXSMatthew.Objects.Wall;
+import lombok.Getter;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 
@@ -28,81 +28,53 @@ public class Main extends JavaPlugin {
     public static Main instance;
 
     public static String pluginName = "TheWalls";
-    public static Config c;
+    @Getter
     private static GameController gc;
+    @Getter
     private static WorldController wc;
+    @Getter
     private static MapController mc;
+    @Getter
     private static WallsController wac;
+    @Getter
     private static PlayerController pc;
+    @Getter
     private static NMS nms;
+    @Getter
     private static ChestControl cc;
+    @Getter
     private static Message msg;
+    @Getter
     private static ItemController ic;
+    @Getter
     private static GUIController guic;
+    @Getter
     private static MySQLController sql;
-    private static SelectEvent se = null;
-    private static BungeeController bungee;
 
-//	SignEvent sign = new SignEvent(this);
-    public ChestControl chest = new ChestControl(this);
-    boolean bc = false;
-    Logger logger = Logger.getLogger("Minecraft");
-    private GameMap setMap = null;
+    //Vault start
+    public static Permission permission = null;
+    public static Economy economy = null;
+    public static Chat chat = null;
+    //Vault end
 
-    public static com.github.JHXSMatthew.Config.Config getCon() {
+    public static Config getCon() {
         return c;
     }
-
-    public static ItemController getIc() {
-        return ic;
-    }
-
-    public static ChestControl getCc() {
-        return cc;
-    }
-
-    public static PlayerController getPc() {
-        return pc;
-    }
-
-    public static NMS getNms() {
-        return nms;
-    }
-
-    public static WorldController getWc() {
-        return wc;
-    }
-
-    public static MapController getMc() {
-        return mc;
-    }
-
-    public static Main get() {
-        return instance;
-    }
-
-    public static Message getMsg() {
-        return msg;
-    }
+    public static Config c;
 
     public static BungeeController getBc() {
         return bungee;
     }
+    private static BungeeController bungee;
 
-    public static GameController getGc() {
-        return gc;
-    }
+    public ChestControl chest = new ChestControl(this);
 
-    public static GUIController getGuic() {
-        return guic;
-    }
+    boolean bc = false;
+    Logger logger = Logger.getLogger("Minecraft");
+    ConsoleCommandSender sender;
 
-    public static MySQLController getSql() {
-        return sql;
-    }
-
-    public static WallsController getWac() {
-        return wac;
+    public static Main get() {
+        return instance;
     }
 
     public void onDisable() {
@@ -110,218 +82,103 @@ public class Main extends JavaPlugin {
         for (Player p : getServer().getOnlinePlayers()) {
             p.teleport(gc.getLobby());
         }
-
-        gc.removeGame(true);
+        if(c.isSetUp) {
+            gc.removeGame(true);
+        }
     }
 
-
     public void onEnable() {
+        sender = Bukkit.getConsoleSender();
         instance = this;
 
-
         logger.info("============ 战墙初始化 ============");
-        logger.info("-->加载配置文件");
+        sender.sendMessage(ChatColor.AQUA+"-->加载配置文件");
         saveDefaultConfig();
         msg = new Message();
-        logger.info("    Msg done");
+        sender.sendMessage("    "+ChatColor.GREEN+"成功加载消息");
         c = new Config(getConfig());
-        logger.info("    Config done");
-
-        logger.info("-->加载控制器");
-
+        sender.sendMessage("    "+ChatColor.GREEN+"成功加载配置");
+        sender.sendMessage(ChatColor.AQUA+"-->加载命令");
+        Bukkit.getPluginCommand("wall").setExecutor(new Command());
+        sender.sendMessage(ChatColor.GREEN+"    命令加载成功");
+        sender.sendMessage(ChatColor.AQUA+"-->加载管理器");
         wc = new WorldController();
-        logger.info("    WC done");
+        sender.sendMessage("    "+ChatColor.GREEN+"世界管理器加载成功");
         wac = new WallsController();
-        logger.info("    Walls done");
+        sender.sendMessage("    "+ChatColor.GREEN+"城墙管理器加载成功");
         nms = new NMSHandler();
-        logger.info("    NMS done");
+        sender.sendMessage("    "+ChatColor.GREEN+"NMS包加载成功");
 
 
         if (c.isSetUp) {
             guic = new GUIController();
-            logger.info("    GUIC done");
+            sender.sendMessage("    "+ChatColor.GREEN+"菜单控制器加载成功");
             pc = new PlayerController();
-            logger.info("    PC done");
+            sender.sendMessage("    "+ChatColor.GREEN+"玩家管理器加载成功");
             mc = new MapController();
-            logger.info("    MC done");
+            sender.sendMessage("    "+ChatColor.GREEN+"地图管理器加载成功");
             gc = new GameController();
-            logger.info("    GC done");
+            sender.sendMessage("    "+ChatColor.GREEN+"游戏管理器加载成功");
             cc = new ChestControl();
-            logger.info("    CC done");
+            sender.sendMessage("    "+ChatColor.GREEN+"箱子管理器加载成功");
             bungee = new BungeeController();
-            logger.info("    BC done。");
+            sender.sendMessage("    "+ChatColor.GREEN+"跨服管理器加载成功");
             ic = new ItemController();
-            logger.info("    IC done");
+            sender.sendMessage("    "+ChatColor.GREEN+"物品管理器加载成功");
 
             sql = new MySQLController();
             sql.openConnection();
 
-            logger.info("    MYSQL done!");
-            logger.info("-->加载事件");
+            sender.sendMessage("    "+ChatColor.GREEN+"数据库管理器加载成功");
+            sender.sendMessage(ChatColor.AQUA+"-->加载监听器");
             getServer().getPluginManager().registerEvents(new BlockListener(), this);
             getServer().getPluginManager().registerEvents(new PlayerListener(), this);
             getServer().getPluginManager().registerEvents(new GuiListener(), this);
             getServer().getPluginManager().registerEvents(bungee, this);
             getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
             getServer().getMessenger().registerOutgoingPluginChannel(this, "LobbyConnect");
+            sender.sendMessage(ChatColor.GREEN+"    监听器加载成功");
 
+            try {
+                sender.sendMessage(ChatColor.AQUA+"-->注册权限经济绑定");
+                setupEconomy();
+                sender.sendMessage(ChatColor.GREEN+"    经济系统绑定成功");
+                setupChat();
+                sender.sendMessage(ChatColor.GREEN+"    聊天系统绑定成功");
+                setupPermissions();
+                sender.sendMessage(ChatColor.GREEN+"    权限系统绑定成功");
+                sender.sendMessage(ChatColor.GREEN+"-->加载成功");
+            } catch (Exception e) {
+                sender.sendMessage(ChatColor.RED+"无法加载!");
+            }
         }
-
-
-        logger.info("============ 初始化完毕 ============");
-
-
+        sender.sendMessage("============ 初始化完毕 ============");
     }
 
-    // 设置命令
-    public boolean onCommand(CommandSender sender, Command cmd, String cl, String[] args) {
-        if (!(sender instanceof Player)) {
-            return false;
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null) {
+            permission = permissionProvider.getProvider();
         }
-        if (!cl.equals("wall")) {
-            return false;
-        }
-        if (!sender.isOp()) {
-            return false;
-        }
-
-        if (args.length < 1) {
-            return false;
-        }
-
-        Player p = (Player) sender;
-        // wall wand
-        if (args[0].equals("wand")) {
-            if (se == null) {
-                se = new SelectEvent();
-                this.getServer().getPluginManager().registerEvents(se, this);
-            }
-            se.getWand(p);
-            p.sendMessage("wand done");
-            return true;
-        }
-
-        // wall start
-        // 直接开始游戏
-        if (args[0].equals("start")) {
-            gc.getGame().switchState(2);
-            return true;
-        }
-
-        // wall create <地图文件夹/世界名> <地图显示名>
-        if (args[0].equals("create")) {
-            if (args.length < 3) {
-                p.sendMessage("Wrong length!");
-                return true;
-            }
-            if (setMap != null) {
-                setMap.save();
-                setMap = new GameMap(args[1]);
-            } else {
-                setMap = new GameMap(args[1]);
-            }
-
-            setMap.setDisplayName(args[2]);
-            p.sendMessage("created!");
-            return true;
-
-        }
-        // wall builder <建筑师名>
-        if (args[0].equals("builder")) {
-            if (args.length < 2) {
-                p.sendMessage("Wrong length!");
-                return true;
-            }
-            setMap.setBuilder(args.toString().replace("builder", ""));
-            return true;
-        }
-
-        if (setMap == null) {
-            p.sendMessage("fucking empty");
-            return false;
-        }
-        // wall bound 拿斧子左键右键标记一个地图区域 对角标记
-        if (args[0].equals("bound")) {
-            setMap.setBound(se.left.clone(), se.right.clone());
-
-            p.sendMessage(se.left.toString());
-            p.sendMessage(se.right.toString());
-            se.clear();
-            return true;
-        }
-        // wall wall 斧子对角标记墙后输入这个
-        if (args[0].equals("wall")) {
-            setMap.addWall(new Wall(se.left.clone(), se.right.clone()));
-            p.sendMessage(se.left.toString());
-            p.sendMessage(se.right.toString());
-            se.clear();
-            p.sendMessage("wall : " + setMap.getWalls().size());
-            return true;
-        }
-        // wall spawn 4个出升点，连输4次哦
-        if (args[0].equals("spawn")) {
-            setMap.addSpawnPoints(p.getLocation());
-            p.sendMessage("count " + setMap.getSpanwPointsCount());
-            return true;
-        }
-
-        // wall player <玩家数量>
-        if (args[0].equals("player")) {
-            if (args.length < 2) {
-                p.sendMessage("Wrong length!");
-                return true;
-            }
-
-            setMap.setPlayer(Integer.parseInt(args[1]));
-            p.sendMessage(args[1]);
-            return true;
-        }
-
-        // wall walltime 墙倒时间
-        if (args[0].equals("walltime")) {
-            if (args.length < 2) {
-                p.sendMessage("Wrong length!");
-                return true;
-            }
-
-            setMap.setWallTime(Integer.parseInt(args[1]));
-            p.sendMessage(args[1]);
-            return true;
-        }
-
-        // wall percentage 鬼知道是什么
-        if (args[0].equals("percentage")) {
-            if (args.length < 2) {
-                p.sendMessage("Wrong length!");
-                return true;
-            }
-
-            setMap.setPercentage(Float.parseFloat(args[1]));
-            p.sendMessage(args[1]);
-            return true;
-        }
-
-        // wall lobby 设置大厅
-        if (args[0].equals("lobby")) {
-            c.lobby = p.getLocation();
-            p.sendMessage(c.lobby.toString());
-            return true;
-        }
-
-        // wall save 保存
-        if (args[0].equals("save")) {
-            setMap.save();
-
-            File target = new File(Bukkit.getPluginManager().getPlugin("TheWalls").getDataFolder() + "/" + "maps" + "/", setMap.getName());
-            File source = new File(p.getWorld().getName());
-            wc.copyWorld(source, target);
-            c.save();
-            p.sendMessage("saved");
-            return true;
-        }
-
-        return false;
+        return (permission != null);
     }
 
+    private boolean setupChat() {
+        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (chatProvider != null) {
+            chat = chatProvider.getProvider();
+        }
+
+        return (chat != null);
+    }
+
+    private boolean setupEconomy() {
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
+
+        return (economy != null);
+    }
 
 }
