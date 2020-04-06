@@ -77,6 +77,10 @@ public class PlayerListener implements Listener {
                 }
             }
             if (!g.isBuildAllow(evt.getTo())) {
+                if(g.getGameState() == 0 || g.getGameState() == 1){
+                    evt.setCancelled(false);
+                    return;
+                }
                 evt.setCancelled(true);
             }
         }
@@ -308,8 +312,15 @@ public class PlayerListener implements Listener {
             isAll = true;
         }
 
-
-        String realMsg = evt.getPlayer().getDisplayName() + ChatColor.GOLD + " >> " + ChatColor.GRAY + evt.getMessage();
+        String gp = Main.chat.getPrimaryGroup(evt.getPlayer());
+        String gpp = Main.chat.getGroupPrefix("", gp).replace("&", "§");
+        String pp = Main.chat.getPlayerPrefix(evt.getPlayer()).replace("&", "§");
+        String realMsg = null;
+        if (pp.equals(gpp)) {
+            realMsg = pp + evt.getPlayer().getDisplayName() + ChatColor.GOLD + " >> " + ChatColor.GRAY + evt.getMessage();
+        } else {
+            realMsg = gpp + pp + evt.getPlayer().getDisplayName() + ChatColor.GOLD + " >> " + ChatColor.GRAY + evt.getMessage();
+        }
 
 
         GamePlayer p = Main.getPc().getGamePlayer(evt.getPlayer());
