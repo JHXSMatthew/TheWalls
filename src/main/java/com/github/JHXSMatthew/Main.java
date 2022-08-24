@@ -60,11 +60,13 @@ public class Main extends JavaPlugin {
     public static Config getCon() {
         return c;
     }
+
     public static Config c;
 
     public static BungeeController getBc() {
         return bungee;
     }
+
     private static BungeeController bungee;
 
     public ChestControl chest = new ChestControl(this);
@@ -82,7 +84,7 @@ public class Main extends JavaPlugin {
         for (Player p : getServer().getOnlinePlayers()) {
             p.teleport(gc.getLobby());
         }
-        if(c.isSetUp) {
+        if (c.isSetUp) {
             gc.removeGame(true);
         }
     }
@@ -92,64 +94,64 @@ public class Main extends JavaPlugin {
         instance = this;
 
         logger.info("============ 战墙初始化 ============");
-        sender.sendMessage(ChatColor.AQUA+"-->加载配置文件");
+        sender.sendMessage(ChatColor.AQUA + "-->加载配置文件");
         saveDefaultConfig();
         msg = new Message();
-        sender.sendMessage("    "+ChatColor.GREEN+"成功加载消息");
+        sender.sendMessage("    " + ChatColor.GREEN + "成功加载消息");
         c = new Config(getConfig());
-        sender.sendMessage("    "+ChatColor.GREEN+"成功加载配置");
-        sender.sendMessage(ChatColor.AQUA+"-->加载命令");
+        sender.sendMessage("    " + ChatColor.GREEN + "成功加载配置");
+        sender.sendMessage(ChatColor.AQUA + "-->加载命令");
         Bukkit.getPluginCommand("wall").setExecutor(new Command());
-        sender.sendMessage(ChatColor.GREEN+"    命令加载成功");
-        sender.sendMessage(ChatColor.AQUA+"-->加载管理器");
+        sender.sendMessage(ChatColor.GREEN + "    命令加载成功");
+        sender.sendMessage(ChatColor.AQUA + "-->加载管理器");
         wc = new WorldController();
-        sender.sendMessage("    "+ChatColor.GREEN+"世界管理器加载成功");
+        sender.sendMessage("    " + ChatColor.GREEN + "世界管理器加载成功");
         wac = new WallsController();
-        sender.sendMessage("    "+ChatColor.GREEN+"城墙管理器加载成功");
+        sender.sendMessage("    " + ChatColor.GREEN + "城墙管理器加载成功");
         nms = new NMSHandler();
-        sender.sendMessage("    "+ChatColor.GREEN+"NMS包加载成功");
+        sender.sendMessage("    " + ChatColor.GREEN + "NMS包加载成功");
 
 
         if (c.isSetUp) {
             guic = new GUIController();
-            sender.sendMessage("    "+ChatColor.GREEN+"菜单控制器加载成功");
+            sender.sendMessage("    " + ChatColor.GREEN + "菜单控制器加载成功");
             pc = new PlayerController();
-            sender.sendMessage("    "+ChatColor.GREEN+"玩家管理器加载成功");
+            sender.sendMessage("    " + ChatColor.GREEN + "玩家管理器加载成功");
             mc = new MapController();
-            sender.sendMessage("    "+ChatColor.GREEN+"地图管理器加载成功");
+            sender.sendMessage("    " + ChatColor.GREEN + "地图管理器加载成功");
             gc = new GameController();
-            sender.sendMessage("    "+ChatColor.GREEN+"游戏管理器加载成功");
+            sender.sendMessage("    " + ChatColor.GREEN + "游戏管理器加载成功");
             cc = new ChestControl();
-            sender.sendMessage("    "+ChatColor.GREEN+"箱子管理器加载成功");
+            sender.sendMessage("    " + ChatColor.GREEN + "箱子管理器加载成功");
             bungee = new BungeeController();
-            sender.sendMessage("    "+ChatColor.GREEN+"跨服管理器加载成功");
+            sender.sendMessage("    " + ChatColor.GREEN + "跨服管理器加载成功");
             ic = new ItemController();
-            sender.sendMessage("    "+ChatColor.GREEN+"物品管理器加载成功");
+            sender.sendMessage("    " + ChatColor.GREEN + "物品管理器加载成功");
 
             sql = new MySQLController();
             sql.openConnection();
 
-            sender.sendMessage("    "+ChatColor.GREEN+"数据库管理器加载成功");
-            sender.sendMessage(ChatColor.AQUA+"-->加载监听器");
+            sender.sendMessage("    " + ChatColor.GREEN + "数据库管理器加载成功");
+            sender.sendMessage(ChatColor.AQUA + "-->加载监听器");
             getServer().getPluginManager().registerEvents(new BlockListener(), this);
             getServer().getPluginManager().registerEvents(new PlayerListener(), this);
             getServer().getPluginManager().registerEvents(new GuiListener(), this);
             getServer().getPluginManager().registerEvents(bungee, this);
             getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
             getServer().getMessenger().registerOutgoingPluginChannel(this, "LobbyConnect");
-            sender.sendMessage(ChatColor.GREEN+"    监听器加载成功");
+            sender.sendMessage(ChatColor.GREEN + "    监听器加载成功");
 
             try {
-                sender.sendMessage(ChatColor.AQUA+"-->注册权限经济绑定");
+                sender.sendMessage(ChatColor.AQUA + "-->注册权限经济绑定");
                 setupEconomy();
-                sender.sendMessage(ChatColor.GREEN+"    经济系统绑定成功");
+                sender.sendMessage(ChatColor.GREEN + "    经济系统绑定成功");
                 setupChat();
-                sender.sendMessage(ChatColor.GREEN+"    聊天系统绑定成功");
+                sender.sendMessage(ChatColor.GREEN + "    聊天系统绑定成功");
                 setupPermissions();
-                sender.sendMessage(ChatColor.GREEN+"    权限系统绑定成功");
-                sender.sendMessage(ChatColor.GREEN+"-->加载成功");
+                sender.sendMessage(ChatColor.GREEN + "    权限系统绑定成功");
+                sender.sendMessage(ChatColor.GREEN + "-->加载成功");
             } catch (Exception e) {
-                sender.sendMessage(ChatColor.RED+"无法加载!");
+                sender.sendMessage(ChatColor.RED + "无法加载!");
             }
         }
         sender.sendMessage("============ 初始化完毕 ============");
