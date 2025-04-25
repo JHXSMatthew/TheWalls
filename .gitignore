@@ -1,5 +1,4 @@
 .idea
-.settings
-*.iml
-.project
 .gradle
+build
+*.iml
