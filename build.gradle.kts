@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 plugins {
     id("io.freefair.lombok") version "8.13.1"
     java
