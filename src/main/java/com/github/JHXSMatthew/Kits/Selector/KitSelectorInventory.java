@@ -50,7 +50,7 @@ public class KitSelectorInventory implements Listener {
 
                     owner.setKit(type.getKit(owner.get(), owner.getKitLevels().get(type)));
                     owner.sendTitle(ChatColor.GREEN + "选择职业 " + ChatColor.GOLD + type.getDisplayName() + "(" + owner.getKitLevels().get(type) + ")" + ChatColor.GREEN + " 成功");
-                    Main.getGc().getGame().updateScorebaordLobby(owner);
+                    Main.getGc().getGame().updateScoreboardLobby(owner);
                     Main.getSql().setCurrentKit(owner);
                     owner.get().getPlayer().closeInventory();
                     break;

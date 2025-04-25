@@ -3,6 +3,7 @@ package com.github.JHXSMatthew.Kits;
 import com.github.JHXSMatthew.Kits.Skills.SkillType;
 import com.github.JHXSMatthew.Kits.allKits.*;
 import com.github.JHXSMatthew.Utils.ItemFactory;
+import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -44,6 +45,7 @@ public enum KitType {
 
 
     private Class<? extends KitBasic> clazz;
+    @Getter
     private String DBName;
     private ItemStack item;
     private SkillType[] skills;
@@ -88,22 +90,12 @@ public enum KitType {
         return skills;
     }
 
-    public String getDBName() {
-        return DBName;
-    }
-
     public KitBasic getKit(Player owner, int level) {
-        KitBasic basic = null;
+        KitBasic basic;
         try {
             basic = clazz.getDeclaredConstructor(UUID.class, int.class).newInstance(owner.getUniqueId(), level);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalStateException("Cannot create a instance for kit " + name(), e);
         }
         return basic;
     }

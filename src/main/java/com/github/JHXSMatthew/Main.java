@@ -51,11 +51,11 @@ public class Main extends JavaPlugin {
     @Getter
     private static MySQLController sql;
 
-    //Vault start
+    // Vault start
     public static Permission permission = null;
     public static Economy economy = null;
     public static Chat chat = null;
-    //Vault end
+    // Vault end
 
     public static Config getCon() {
         return c;
