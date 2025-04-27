@@ -2,17 +2,25 @@ package com.github.JHXSMatthew.Game;
 
 import com.github.JHXSMatthew.Main;
 import com.github.JHXSMatthew.Objects.SQLStatsContainer;
+import lombok.Getter;
 
 import java.sql.SQLException;
 
 public class GameStats {
 
-    private String name;
+    @Getter
+    private final String name;
+    @Getter
     private int games = 0;
+    @Getter
     private int wins = 0;
+    @Getter
     private int kills = 0;
+    @Getter
     private int death = 0;
+    @Getter
     private int money = 0;
+    @Getter
     private boolean isNew = true;
     private boolean changed = false;
 
@@ -61,18 +69,6 @@ public class GameStats {
         }
     }
 
-    public boolean isNew() {
-        return isNew;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getMoney() {
-        return money;
-    }
-
     public void addWin() {
         changed = true;
         wins++;
@@ -98,19 +94,4 @@ public class GameStats {
         money += amount;
     }
 
-    public int getGames() {
-        return games;
-    }
-
-    public int getWins() {
-        return wins;
-    }
-
-    public int getKills() {
-        return kills;
-    }
-
-    public int getDeath() {
-        return death;
-    }
 }

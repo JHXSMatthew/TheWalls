@@ -7,17 +7,15 @@ import com.github.JHXSMatthew.Objects.SQLStatsContainer;
 import com.huskehhh.mysql.mysql.MySQL;
 import org.bukkit.Bukkit;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.HashMap;
 
+@SuppressWarnings("CallToPrintStackTrace")
 public class MySQLController {
 
-    private static String TABLENAME = "TheWalls";
+    private final static String TABLE_NAME = "TheWalls";
+    private final MySQL my;
     private Connection c = null;
-    private MySQL my;
 
     public MySQLController() {
         this.my = new MySQL("192.168.123.2", "3306", "games", "game", "NO_PUBLIC_SECTION");
@@ -26,17 +24,14 @@ public class MySQLController {
     public void openConnection() {
         try {
             c = my.openConnection();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             System.out.print("Connection error !");
             e.printStackTrace();
-        } catch (SQLException e1) {
-            System.out.print("Connection error !");
-            e1.printStackTrace();
         }
     }
 
 
-    public void clsoeConnection() throws SQLException {
+    public void closeConnection() throws SQLException {
         this.c.close();
     }
 
@@ -51,11 +46,12 @@ public class MySQLController {
             if (!this.my.checkConnection()) {
                 this.c = this.my.openConnection();
             }
-            Statement s = this.c.createStatement();
-            ResultSet result = s.executeQuery("SELECT * FROM `TheWallsKits` WHERE id= (SELECT TheWalls.id FROM TheWalls WHERE TheWalls.Name = '" + gp.get().getName() + "');");
+            PreparedStatement s = this.c.prepareStatement("SELECT * FROM `TheWallsKits` " + "WHERE id = (SELECT TheWalls.id FROM TheWalls WHERE TheWalls.Name = ?);");
+            s.setString(1, gp.get().getName());
+            ResultSet result = s.executeQuery();
             if (result.next()) {
 
-                map = new HashMap<KitType, Integer>();
+                map = new HashMap<>();
                 for (KitType type : KitType.values())
                     map.put(type, result.getInt(type.getDBName()));
                 try {
@@ -63,7 +59,7 @@ public class MySQLController {
                     if (current != null) {
                         gp.setKit(KitType.getType(current).getKit(gp.get(), map.get(KitType.getType(current))));
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             }
@@ -79,12 +75,9 @@ public class MySQLController {
             if (!this.my.checkConnection()) {
                 this.c = this.my.openConnection();
             }
-            Statement s = this.c.createStatement();
-            s.executeUpdate("UPDATE `TheWallsKits` SET current='"
-                    + gp.getKit().getType().getDBName() +
-                    "' WHERE id= (SELECT TheWalls.id FROM TheWalls WHERE TheWalls.Name = '"
-                    + gp.get().getName() +
-                    "');");
+            PreparedStatement s = this.c.prepareStatement("UPDATE `TheWallsKits` " + "SET current = '" + gp.getKit().getType().getDBName() + "' " + "WHERE id = (SELECT TheWalls.id FROM TheWalls WHERE TheWalls.Name = ?);");
+            s.setString(1, gp.get().getName());
+            s.executeUpdate("");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,8 +87,9 @@ public class MySQLController {
         if (!this.my.checkConnection()) {
             this.c = this.my.openConnection();
         }
-        Statement s = this.c.createStatement();
-        ResultSet result = s.executeQuery("SELECT * FROM `" + TABLENAME + "` Where `Name`='" + name + "';");
+        PreparedStatement s = this.c.prepareStatement("SELECT * FROM `" + TABLE_NAME + "` Where `Name`= ?");
+        s.setString(1, name);
+        ResultSet result = s.executeQuery();
         SQLStatsContainer current = new SQLStatsContainer();
 
         if (result.next()) {
@@ -113,45 +107,41 @@ public class MySQLController {
 
         s.close();
         result.close();
-        s = null;
 
         return current;
-
     }
 
     public boolean hasData(String name) throws SQLException, ClassNotFoundException {
         if (!this.my.checkConnection()) {
             this.c = this.my.openConnection();
         }
-        Statement s = this.c.createStatement();
-        ResultSet result = s.executeQuery("SELECT id FROM `" + TABLENAME + "` Where `Name`='" + name + "';");
-        SQLStatsContainer current = new SQLStatsContainer();
+        PreparedStatement s = this.c.prepareStatement("SELECT id FROM `" + TABLE_NAME + "` Where `Name`=?;");
+        s.setString(1, name);
+        ResultSet result = s.executeQuery();
 
         if (!result.next()) {
             s.close();
             result.close();
-            s = null;
             return false;
         }
 
         s.close();
         result.close();
-        s = null;
 
         return true;
     }
 
-    public boolean savePlayerData(GameStats data) {
+    public void savePlayerData(GameStats data) {
         String name = data.getName();
-        try (Statement s = this.c.createStatement()) {
+        try {
             if (data.isNew() || !hasData(name)) {
-                s.executeUpdate("INSERT INTO `" + TABLENAME + "` (`Name`,`Games`,`Wins`,`Kills`,`Deaths`,`Coins`) VALUES ('" + data.getName() + "','" + data.getGames() + "','" + data.getWins() + "','" + data.getKills() + "','" + data.getDeath() + "','" + data.getMoney() + "');");
+                PreparedStatement s = this.c.prepareStatement("INSERT INTO `" + TABLE_NAME + "` (`Name`,`Games`,`Wins`,`Kills`,`Deaths`,`Coins`) " + "VALUES (?,'" + data.getGames() + "','" + data.getWins() + "','" + data.getKills() + "','" + data.getDeath() + "','" + data.getMoney() + "');");
+                s.setString(1, name);
+                s.executeUpdate();
             } else {
-                s.executeUpdate("UPDATE `" + TABLENAME + "` SET `Games`='" + data.getGames() + "',`Wins`='" + data.getWins()
-                        + "',`Kills`='" + data.getKills()
-                        + "',`Deaths`='" + data.getDeath()
-                        + "',`Coins`='" + data.getMoney()
-                        + "' Where `Name`='" + name + "';");
+                PreparedStatement s = this.c.prepareStatement("UPDATE `" + TABLE_NAME + "` " + "SET `Games`='" + data.getGames() + "'," + "`Wins`='" + data.getWins() + "'," + "`Kills`='" + data.getKills() + "'," + "`Deaths`='" + data.getDeath() + "'," + "`Coins`='" + data.getMoney() + "' " + "Where `Name`=?;");
+                s.setString(1, name);
+                s.executeUpdate();
 					
 
 					/*
@@ -163,16 +153,8 @@ public class MySQLController {
 					  */
 
             }
-
-
-            s.close();
-            return true;
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            return false;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return false;
         }
 
     }
@@ -181,8 +163,9 @@ public class MySQLController {
         if (!this.my.checkConnection()) {
             this.c = this.my.openConnection();
         }
-        Statement s = this.c.createStatement();
-        ResultSet result = s.executeQuery("SELECT * FROM `expControl` Where `Name`='" + name + "';");
+        PreparedStatement s = this.c.prepareStatement("SELECT * FROM `expControl` Where `Name`=?;");
+        s.setString(1, name);
+        ResultSet result = s.executeQuery();
         if (result.next()) {
             float i = result.getFloat("amount");
             s.close();
@@ -200,38 +183,43 @@ public class MySQLController {
         if (!this.my.checkConnection()) {
             this.c = this.my.openConnection();
         }
-        Statement s = this.c.createStatement();
-        s.executeUpdate("DELETE FROM `expControl` Where `Name`='" + name + "';");
+        PreparedStatement s = this.c.prepareStatement("DELETE FROM `expControl` Where `Name`=?;");
+        s.setString(1, name);
+        s.executeUpdate();
         s.close();
-        s = null;
     }
 
     public void updatePlayer(String name, float amount) throws ClassNotFoundException, SQLException {
         if (!this.my.checkConnection()) {
             this.c = this.my.openConnection();
         }
-        Statement s = this.c.createStatement();
         float i = getUser(name);
 
         if (i == -1) {
-            s.executeUpdate("INSERT INTO `expControl` (`Name`,`Amount`) VALUES ('" + name + "','" + amount + "');");
+            PreparedStatement s = this.c.prepareStatement("INSERT INTO `expControl` (`Name`,`Amount`) VALUES (?, ?);");
+            s.setString(1, name);
+            s.setFloat(2, amount);
+            s.executeUpdate();
+            s.close();
         } else {
             if (i != Bukkit.getPlayer(name).getExp()) {
-                s.executeUpdate("UPDATE `expControl` SET `Amount`='" + amount + "' Where `Name`='" + name + "';");
+                PreparedStatement s = this.c.prepareStatement("UPDATE `expControl` SET `Amount`= ? Where `Name`= ?;");
+                s.setFloat(1, amount);
+                s.setString(2, name);
+                s.executeUpdate();
+                s.close();
             }
 
         }
-
-        s.close();
-        s = null;
     }
 
     public int getWhackScore(String name) throws ClassNotFoundException, SQLException {
         if (!this.my.checkConnection()) {
             this.c = this.my.openConnection();
         }
-        Statement s = this.c.createStatement();
-        ResultSet result = s.executeQuery("SELECT `score` FROM `WackAmole` Where `name`='" + name + "';");
+        PreparedStatement s = this.c.prepareStatement("SELECT `score` FROM `WackAmole` Where `name`=?;");
+        s.setString(1, name);
+        ResultSet result = s.executeQuery();
         if (!result.next()) {
             return -1;
         }

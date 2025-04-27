@@ -1,6 +1,7 @@
 package com.github.JHXSMatthew;
 
 import com.github.JHXSMatthew.Game.GameMap;
+import com.github.JHXSMatthew.Game.GameState;
 import com.github.JHXSMatthew.Listeners.SelectEvent;
 import com.github.JHXSMatthew.Objects.Wall;
 import org.bukkit.Bukkit;
@@ -98,7 +99,7 @@ public class Command implements CommandExecutor {
                 return true;
             }
             if(s1.equalsIgnoreCase("start")){
-                Main.getGc().getGame().switchState(2);
+                Main.getGc().getGame().switchState(GameState.WALL_NOT_FALL);
                 return true;
             }
             if(s1.equalsIgnoreCase("bound")){

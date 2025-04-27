@@ -8,6 +8,7 @@ import com.github.JHXSMatthew.Objects.Wall;
 import com.github.JHXSMatthew.event.GameEndEvent;
 import com.github.JHXSMatthew.event.GameInitReadyEvent;
 import com.github.JHXSMatthew.event.GameStartEvent;
+import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -19,14 +20,15 @@ import org.bukkit.scoreboard.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("CommentedOutCode")
 public class Game {
 
-    private GameMap map = null;
-    private World world = null;
-    private List<GamePlayer> players;
-    private List<GameTeam> teams;
+    private final GameMap map;
+    private final World world;
+    private final List<GamePlayer> players;
+    private final List<GameTeam> teams;
 
-    private GameTeam specTeam = null;
+    private final GameTeam specTeam;
     /*
       0 is lobby
       1 is starting
@@ -34,15 +36,16 @@ public class Game {
       3 is wall fall
       4 is finishing
     */
-    private int gameState = 0;
+    @Getter
+    private GameState gameState = GameState.LOBBY;
     private BukkitTask currentTask = null;
 
     public Game(GameMap m, World w) {
         map = m;
         world = w;
 
-        players = new ArrayList<GamePlayer>();
-        teams = new ArrayList<GameTeam>();
+        players = new ArrayList<>();
+        teams = new ArrayList<>();
         for (int i = 0; i < map.getSpanwPointsCount(); i++) {
             teams.add(new GameTeam(map.getSpawnPoints(i), false));
             teams.get(i).setName(Main.getMsg().parseTeamName(i));
@@ -72,7 +75,7 @@ public class Game {
         Block max = world.getBlockAt(maxX, maxY, maxZ);
         Chunk cMin = min.getChunk();
         Chunk cMax = max.getChunk();
-        List<Chunk> chunks = new ArrayList<Chunk>();
+        List<Chunk> chunks = new ArrayList<>();
 
         for (int cx = cMin.getX(); cx < cMax.getX(); cx++) {
             for (int cz = cMin.getZ(); cz < cMax.getZ(); cz++) {
@@ -85,22 +88,21 @@ public class Game {
 
     public void joinGame(GamePlayer p) {
         players.add(p);
-        if (gameState == 0 || gameState == 1) {
+        if (gameState == GameState.LOBBY || gameState == GameState.STARTING) {
 
             GameTeam team = teams.get(0);
             for (GameTeam t : teams) {
-                if (team.getPlyaerAmount() > t.getPlyaerAmount()) {
+                if (team.getPlayerAmount() > t.getPlayerAmount()) {
                     team = t;
                 }
             }
 
             team.joinTeam(p);
             p.setGameLobby(this, team);
-            Main.getMsg();
             sendToAllMessage(p.get().getName() + Main.getMsg().getMessage("join-team-msg1") + team.getName() + ChatColor.GREEN + "  (" + players.size() + "/" + map.getPlayerLimit() + ")");
             Main.getIc().giveLobbyItem(p);
-            if (players.size() >= map.getPlayerLimit() / 2 && gameState == 0) {
-                switchState(1);
+            if (players.size() >= map.getPlayerLimit() / 2 && gameState == GameState.LOBBY) {
+                switchState(GameState.STARTING);
             } else {
                 updateScoreBoard();
             }
@@ -118,29 +120,27 @@ public class Game {
     }
 
     public void checkWinning() {
-        if (gameState == 4) {
+        if (gameState == GameState.FINISHING) {
             return;
         }
         GameTeam preTeam = null;
 
         for (GameTeam t : teams) {
-            if (t.getPlyaerAmount() > 0) {
+            if (t.getPlayerAmount() > 0) {
                 preTeam = t;
                 break;
             }
         }
 
         for (GameTeam t : teams) {
-            if (t.getPlyaerAmount() > 0) {
-                if (t == preTeam) {
-                    continue;
-                } else {
+            if (t.getPlayerAmount() > 0) {
+                if (t != preTeam) {
                     return;
                 }
             }
         }
 
-        switchState(4);
+        switchState(GameState.FINISHING);
     }
 
     public void joinTeamRequest(GamePlayer p, String teamName) {
@@ -150,11 +150,10 @@ public class Game {
             if (t.getName().equals(teamName)) {
                 target = t;
             }
-            count += t.getPlyaerAmount();
+            count += t.getPlayerAmount();
         }
         if (target == null) {
-            System.out.print("fukcing null");
-            return;
+            throw new IllegalStateException("Team is Null");
         }
 
         if (p.getTeam().equals(target)) {
@@ -162,7 +161,7 @@ public class Game {
             return;
         }
 
-        if (target.getPlyaerAmount() - count / teams.size() - 1 > 0 || target.getPlyaerAmount() >= map.getPlayerLimit() / teams.size()) {
+        if (target.getPlayerAmount() - count / teams.size() - 1 > 0 || target.getPlayerAmount() >= map.getPlayerLimit() / teams.size()) {
             p.get().sendMessage(Message.prefix + Main.getMsg().getMessage("team-join-full"));
             return;
         }
@@ -180,9 +179,9 @@ public class Game {
         gp.getTeam().removeTeam(gp);
         players.remove(gp);
         if (!gp.isSpec()) {
-            if (gameState == 0 || gameState == 1) {
+            if (gameState == GameState.LOBBY || gameState == GameState.STARTING) {
                 sendToAllMessage(Main.getMsg().getMessage("lobby-quit-msg1") + gp.get().getName() + Main.getMsg().getMessage("lobby-quit-msg2") + ChatColor.GREEN + "  (" + players.size() + "/" + map.getPlayerLimit() + ")");
-            } else if (gameState != 4) {
+            } else if (gameState != GameState.FINISHING) {
                 sendToAllMessage(gp.getTeam().getName() + Main.getMsg().getMessage("game-quit-msg1") + gp.get().getName() + Main.getMsg().getMessage("game-quit-msg2"));
                 checkWinning();
             }
@@ -215,7 +214,7 @@ public class Game {
                     public void run() {
                         if (count > 0) {
                             if (players.size() < map.getPlayerLimit() / 2) {
-                                switchState(0);
+                                switchState(GameState.LOBBY);
                                 cancel();
                             } else if (players.size() == map.getPlayerLimit() && count > 30) {
                                 sendToAllMessage(Main.getMsg().getMessage("time-jump-to-30"));
@@ -237,7 +236,7 @@ public class Game {
 
                         } else {
                             sendToAllEXP(0);
-                            switchState(2);
+                            switchState(GameState.WALL_NOT_FALL);
                             cancel();
                         }
                         count--;
@@ -249,9 +248,8 @@ public class Game {
             case 2:
                 try {
                     currentTask.cancel();
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
-                ;
                 currentTask = new BukkitRunnable() {
                     int count = map.getWallTime();
 
@@ -273,7 +271,7 @@ public class Game {
                         }
 
 
-                        switchState(3);
+                        switchState(GameState.WALL_FALL);
                         cancel();
                     }
 
@@ -283,9 +281,8 @@ public class Game {
             case 4:
                 try {
                     currentTask.cancel();
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
-                ;
                 currentTask = new BukkitRunnable() {
                     int count = 15;
 
@@ -309,14 +306,14 @@ public class Game {
 
                         new BukkitRunnable() {
                             public void run() {
-                                if (Bukkit.getOnlinePlayers().size() != 0 && Main.getGc().getGame() != null && Main.getGc().getGame().getGameState() == 4) {
+                                if (!Bukkit.getOnlinePlayers().isEmpty() && Main.getGc().getGame() != null && Main.getGc().getGame().getGameState() == GameState.FINISHING) {
                                     for (Player p : Bukkit.getOnlinePlayers()) {
                                         Main.getBc().quitSend(p);
                                     }
 
                                     new BukkitRunnable() {
                                         public void run() {
-                                            if (Bukkit.getOnlinePlayers().size() != 0 && Main.getGc().getGame() != null && Main.getGc().getGame().getGameState() == 4) {
+                                            if (!Bukkit.getOnlinePlayers().isEmpty() && Main.getGc().getGame() != null && Main.getGc().getGame().getGameState() == GameState.FINISHING) {
                                                 for (Player p : Bukkit.getOnlinePlayers()) {
                                                     p.kickPlayer("战墙强制退出");
                                                 }
@@ -346,10 +343,10 @@ public class Game {
 		}
 		
 		for(GameTeam gt : teams){
-			while(gt.getPlyaerAmount() > average){
+			while(gt.getPlayerAmount() > average){
 				for(GameTeam temp : teams){
-					if(temp.getPlyaerAmount() < average){
-						GamePlayer removePlayer = gt.getPlayers().get(gt.getPlyaerAmount() -1);
+					if(temp.getPlayerAmount() < average){
+						GamePlayer removePlayer = gt.getPlayers().get(gt.getPlayerAmount() -1);
 						gt.removeTeam(removePlayer);
 						temp.joinTeam(removePlayer);
 						break;
@@ -369,27 +366,26 @@ public class Game {
         return map.getDown().getBlockY();
     }
 
-    public void switchState(int state) {
+    public void switchState(GameState state) {
         switch (state) {
-            case 0:
-                if (gameState != 1) {
+            case LOBBY:
+                if (gameState != GameState.LOBBY) {
                     System.out.print("Illegal Switch to 0");
                     return;
                 }
-                gameState = 0;
                 Main.getMsg().getMessage("not-enough-people");
                 sendToAllSound(Sound.VILLAGER_NO);
                 sendToAllEXP(0);
                 updateScoreBoard();
                 break;
 
-            case 1:
-                gameState = 1;
+            case STARTING:
+                gameState = GameState.STARTING;
                 startCount(1);
                 updateScoreBoard();
                 break;
-            case 2:
-                gameState = 2;
+            case WALL_NOT_FALL:
+                gameState = GameState.WALL_NOT_FALL;
 
                 balanceTeam();
                 new BukkitRunnable() {
@@ -415,8 +411,8 @@ public class Game {
                 Bukkit.getPluginManager().callEvent(new GameStartEvent());
                 break;
 
-            case 3:
-                gameState = 3;
+            case WALL_FALL:
+                gameState = GameState.WALL_FALL;
                 List<Wall> walls = map.getWalls();
                 for (Wall w : walls) {
                     w.setFallen();
@@ -428,8 +424,8 @@ public class Game {
                 }
                 sendToAllSoundAndMsgAndTitle(Sound.EXPLODE, Main.getMsg().getMessage("wall-fall-msg"), Main.getMsg().getMessage("wall-fall-title"));
                 break;
-            case 4:
-                gameState = 4;
+            case FINISHING:
+                gameState = GameState.FINISHING;
                 for (GamePlayer p : players) {
                     if (!p.isSpec()) {
                         p.getGs().addWin();
@@ -455,7 +451,7 @@ public class Game {
     }
 
     public void changeTeamTo(Player p, int i) {
-
+        // TODO
     }
 
     private Scoreboard getEmptyScoreBoard() {
@@ -475,14 +471,10 @@ public class Game {
     private void updateScoreBoard() {
 
         switch (gameState) {
-            case 0:
+            case LOBBY:
+            case STARTING:
                 for (GamePlayer gp : players) {
-                    updateScorebaordLobby(gp);
-                }
-                return;
-            case 1:
-                for (GamePlayer gp : players) {
-                    updateScorebaordLobby(gp);
+                    updateScoreboardLobby(gp);
                 }
                 return;
 
@@ -490,24 +482,24 @@ public class Game {
 
         Scoreboard board = getEmptyScoreBoard();
         Objective ob = board.getObjective(DisplaySlot.SIDEBAR);
-        Score score = null;
+        Score score;
         score = ob.getScore("地图: " + ChatColor.AQUA + map.getDisplayerName());
         score.setScore(11);
 
         score = ob.getScore("人数: " + players.size());
         score.setScore(10);
 
-        score = ob.getScore("玩家: " + (players.size() - specTeam.getPlyaerAmount()));
+        score = ob.getScore("玩家: " + (players.size() - specTeam.getPlayerAmount()));
         score.setScore(9);
 
-        score = ob.getScore("观战: " + specTeam.getPlyaerAmount());
+        score = ob.getScore("观战: " + specTeam.getPlayerAmount());
         score.setScore(8);
 
         score = ob.getScore("  ");
         score.setScore(7);
         int i = 6;
         for (GameTeam t : teams) {
-            score = ob.getScore(t.getName() + ": " + ChatColor.RESET + t.getPlyaerAmount());
+            score = ob.getScore(t.getName() + ": " + ChatColor.RESET + t.getPlayerAmount());
             score.setScore(i);
             i--;
         }
@@ -521,12 +513,12 @@ public class Game {
         }
     }
 
-    public void updateScorebaordLobby(GamePlayer gp) {
+    public void updateScoreboardLobby(GamePlayer gp) {
+        Scoreboard board = getEmptyScoreBoard();
+        Objective ob = board.getObjective(DisplaySlot.SIDEBAR);
+        Score score;
         switch (gameState) {
-            case 0:
-                Scoreboard board = getEmptyScoreBoard();
-                Objective ob = board.getObjective(DisplaySlot.SIDEBAR);
-                Score score = null;
+            case LOBBY:
                 score = ob.getScore("场次: " + ChatColor.GREEN + gp.getGs().getGames());
                 score.setScore(10);
 
@@ -567,10 +559,9 @@ public class Game {
                 gp.get().setScoreboard(board);
 
                 return;
-            case 1:
+            case STARTING:
                 board = getEmptyScoreBoard();
                 ob = board.getObjective(DisplaySlot.SIDEBAR);
-                score = null;
                 score = ob.getScore("场次: " + ChatColor.GREEN + gp.getGs().getGames());
                 score.setScore(10);
 
@@ -605,12 +596,10 @@ public class Game {
                 score = ob.getScore(" ");
                 score.setScore(0);
 
-                score = ob.getScore(ChatColor.AQUA + "www.mcndjs.com");
+                score = ob.getScore(ChatColor.AQUA + "www.mcndsj.com");
                 score.setScore(-1);
 
                 gp.get().setScoreboard(board);
-
-                return;
 
         }
     }
@@ -624,7 +613,6 @@ public class Game {
     private void sendToAllActionBar(String str) {
         for (GamePlayer p : players) {
             p.sendActionBar(str);
-            ;
         }
     }
 
@@ -681,8 +669,9 @@ public class Game {
      */
 
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isBuildAllow(Location l) {
-        if (gameState == 0 || gameState == 1) {
+        if (gameState == GameState.LOBBY || gameState == GameState.STARTING) {
             return false;
         }
         Location up = map.getUp();
@@ -691,7 +680,7 @@ public class Game {
             return false;
         }
 
-        if (gameState == 2) {
+        if (gameState == GameState.WALL_NOT_FALL) {
             for (Wall w : map.getWalls()) {
                 if (w.isWallBlock(l)) return false;
             }
@@ -704,21 +693,15 @@ public class Game {
         return players.contains(p);
     }
 
-    public int getGameState() {
-        return gameState;
-    }
-
     public String getGameStateString() {
         switch (gameState) {
-            case 0:
+            case LOBBY:
                 return ChatColor.GREEN + "等待中";
-            case 1:
+            case STARTING:
                 return ChatColor.GREEN + "开始中";
-            case 2:
-                return ChatColor.RED + "游戏中";
-            case 3:
-                return ChatColor.RED + "游戏中";
-            case 4:
+            case WALL_NOT_FALL:
+            case WALL_FALL:
+            case FINISHING:
                 return ChatColor.RED + "游戏中";
         }
         return ChatColor.RED + "游戏中";

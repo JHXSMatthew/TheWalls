@@ -4,6 +4,7 @@ import com.github.JHXSMatthew.Config.Config;
 import com.github.JHXSMatthew.Config.Message;
 import com.github.JHXSMatthew.Game.Game;
 import com.github.JHXSMatthew.Game.GamePlayer;
+import com.github.JHXSMatthew.Game.GameState;
 import com.github.JHXSMatthew.Game.GameTeam;
 import com.github.JHXSMatthew.Kits.Selector.KitSelectorInventory;
 import com.github.JHXSMatthew.Main;
@@ -38,7 +39,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class PlayerListener implements Listener {
-    private ArrayList<String> noSpam;
+    private final ArrayList<String> noSpam;
 
     public PlayerListener() {
         noSpam = new ArrayList<String>();
@@ -63,8 +64,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent evt) {
-        if (evt.getPlayer().getWorld().getName().equals("lobby"))
-            return;
+        if (evt.getPlayer().getWorld().getName().equals("lobby")) return;
 
         if (Main.getGc().getGame() != null) {
             Game g = Main.getGc().getGame();
@@ -77,7 +77,7 @@ public class PlayerListener implements Listener {
                 }
             }
             if (!g.isBuildAllow(evt.getTo())) {
-                if(g.getGameState() == 0 || g.getGameState() == 1){
+                if (g.getGameState() == GameState.LOBBY || g.getGameState() == GameState.STARTING) {
                     evt.setCancelled(false);
                     return;
                 }
@@ -99,10 +99,10 @@ public class PlayerListener implements Listener {
         g.quitGame(p);
         Main.getPc().removeGamePlayer(p.get().getName());
 
-        if (g.getGameState() > 1 && g.getPlayerCount() == 0) {
+        if (g.getGameState().ordinal() > 1 && g.getPlayerCount() == 0) {
             try {
                 Main.getGc().removeGame(false);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }
@@ -111,17 +111,13 @@ public class PlayerListener implements Listener {
                 if (evt.getPlayer().getGameMode() != GameMode.SPECTATOR) {
 
                     for (ItemStack item : evt.getPlayer().getInventory().getContents()) {
-                        if (item == null)
-                            continue;
-                        if (item.getType() == Material.AIR)
-                            continue;
+                        if (item == null) continue;
+                        if (item.getType() == Material.AIR) continue;
                         evt.getPlayer().getWorld().dropItemNaturally(evt.getPlayer().getLocation(), item);
                     }
                     for (ItemStack item : evt.getPlayer().getInventory().getArmorContents()) {
-                        if (item == null)
-                            continue;
-                        if (item.getType() == Material.AIR)
-                            continue;
+                        if (item == null) continue;
+                        if (item.getType() == Material.AIR) continue;
                         evt.getPlayer().getWorld().dropItemNaturally(evt.getPlayer().getLocation(), item);
                     }
                 }
@@ -168,14 +164,13 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (g.getGameState() == 2) {
+        if (g.getGameState() == GameState.WALL_NOT_FALL) {
             if (p.getItemInHand() == null) {
                 return;
             }
             if (p.getItemInHand().getType().equals(Material.LAVA) || p.getItemInHand().getType().equals(Material.LAVA_BUCKET)) {
                 p.sendMessage(Message.prefix + Main.getMsg().getMessage("no-before-wallfall"));
                 evt.setCancelled(true);
-                return;
             }
         }
 		
@@ -246,7 +241,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (g.getGameState() == 4) {
+        if (g.getGameState() == GameState.FINISHING) {
             evt.setCancelled(true);
             return;
         }
@@ -255,7 +250,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (g.getGameState() == 0 || g.getGameState() == 1) {
+        if (g.getGameState() == GameState.LOBBY || g.getGameState() == GameState.STARTING) {
             evt.setCancelled(true);
             if (evt.getCause() == DamageCause.VOID) {
                 gp.get().teleport(Main.getGc().getLobby());
@@ -284,14 +279,13 @@ public class PlayerListener implements Listener {
             GamePlayer damager_GamePlayer = Main.getPc().getGamePlayer(damager_Player);
             if (gp.getTeam().isInTeam(damager_GamePlayer) && damager_GamePlayer.getTeam().isInTeam(gp))
                 event.setCancelled(true);
-            return;
         }
 
     }
 
     @EventHandler
     public void handleItemDrop(PlayerDropItemEvent evt) {
-        if (Main.getGc().getGame().getGameState() < 2) {
+        if (Main.getGc().getGame().getGameState().ordinal() < 2) {
             evt.setCancelled(true);
         }
     }
@@ -312,43 +306,43 @@ public class PlayerListener implements Listener {
             isAll = true;
         }
 
-        String gp = Main.chat.getPrimaryGroup(evt.getPlayer());
-        String gpp = Main.chat.getGroupPrefix("", gp).replace("&", "§");
-        String pp = Main.chat.getPlayerPrefix(evt.getPlayer()).replace("&", "§");
-        String realMsg = null;
-        if (pp.equals(gpp)) {
-            realMsg = pp + evt.getPlayer().getDisplayName() + ChatColor.GOLD + " >> " + ChatColor.GRAY + evt.getMessage();
-        } else {
-            realMsg = gpp + pp + evt.getPlayer().getDisplayName() + ChatColor.GOLD + " >> " + ChatColor.GRAY + evt.getMessage();
+        String playerGroup = Main.chat.getPrimaryGroup(evt.getPlayer());
+        String prefix = Main.chat.getGroupPrefix("", playerGroup).replace("&", "§");
+        String playerPrefix = Main.chat.getPlayerPrefix(evt.getPlayer()).replace("&", "§");
+        StringBuilder finalMessage = new StringBuilder();
+        finalMessage.append(prefix);
+        if (!playerPrefix.equals(prefix)) {
+            finalMessage.append(playerPrefix);
         }
+        finalMessage.append(evt.getPlayer().getDisplayName()).append(ChatColor.GOLD).append(" >> ").append(ChatColor.GRAY).append(evt.getMessage());
 
 
-        GamePlayer p = Main.getPc().getGamePlayer(evt.getPlayer());
-        GameTeam gt = p.getTeam();
-        Game g = p.getGame();
-        if (gt == null || g == null) {
+        GamePlayer gamePlayer = Main.getPc().getGamePlayer(evt.getPlayer());
+        GameTeam gameTeam = gamePlayer.getTeam();
+        Game game = gamePlayer.getGame();
+        if (gameTeam == null || game == null) {
             return;
         }
 
         try {
-            if (!p.notified && !p.isSpec() && p.getGame().getGameState() == 2) {
-                p.get().sendMessage(Message.prefix + Main.getMsg().getMessage("notify-chat-format1"));
-                p.get().sendMessage(Message.prefix + Main.getMsg().getMessage("notify-chat-format2"));
-                p.notified = true;
+            if (!gamePlayer.notified && !gamePlayer.isSpec() && gamePlayer.getGame().getGameState() == GameState.WALL_NOT_FALL) {
+                gamePlayer.get().sendMessage(Message.prefix + Main.getMsg().getMessage("notify-chat-format1"));
+                gamePlayer.get().sendMessage(Message.prefix + Main.getMsg().getMessage("notify-chat-format2"));
+                gamePlayer.notified = true;
             }
-        } catch (Exception e) {
-
+        } catch (Exception ignored) {
         }
 
+        // 全体发言 或
 
-        if (isAll || g.getGameState() < 2 || p.isSpec() || g.getGameState() == 4) {
-            if (p.isSpec() && g.getGameState() != 4) {
-                gt.sendTeamMessage(realMsg);
+        if (isAll || game.getGameState().ordinal() < 2 || gamePlayer.isSpec() || game.getGameState() == GameState.FINISHING) {
+            if (gamePlayer.isSpec() && game.getGameState() != GameState.FINISHING) {
+                gameTeam.sendTeamMessage(finalMessage.toString());
                 return;
             }
-            p.getGame().sendAllChatMessage(realMsg);
+            gamePlayer.getGame().sendAllChatMessage(finalMessage.toString());
         } else {
-            gt.sendTeamMessage(realMsg);
+            gameTeam.sendTeamMessage(finalMessage.toString());
         }
 
     }
@@ -405,7 +399,7 @@ public class PlayerListener implements Listener {
         if (g == null) {
             return;
         }
-        if (g.getGameState() < 2) {
+        if (g.getGameState().ordinal() < 2) {
             if (evt.getAction() == Action.LEFT_CLICK_BLOCK || evt.getAction() == Action.LEFT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK || evt.getAction() == Action.RIGHT_CLICK_AIR) {
                 if (p.getItemInHand() == null || evt.getPlayer().getItemInHand().equals(Material.AIR)) {
                     return;
@@ -439,7 +433,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (g.getGameState() != 2) {
+        if (g.getGameState() != GameState.WALL_NOT_FALL) {
             return;
         }
 
@@ -448,7 +442,6 @@ public class PlayerListener implements Listener {
                 if (p.getItemInHand() == null || p.getItemInHand().getType().equals(Material.AIR)) {
                     if (gp.isMyFur(evt.getClickedBlock().getLocation())) {
                         gp.openFurGUI();
-                        return;
                     }
                 }
             }

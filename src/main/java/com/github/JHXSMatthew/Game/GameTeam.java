@@ -1,6 +1,7 @@
 package com.github.JHXSMatthew.Game;
 
 import com.github.JHXSMatthew.Main;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -15,24 +16,21 @@ import java.util.List;
 
 public class GameTeam {
     private Location l;
-    private List<GamePlayer> list = null;
-    private boolean spec = false;
+    private final List<GamePlayer> list;
+    private final boolean spec;
+    @Getter
     private String name;
     private Color color = null;
 
     public GameTeam(Location spawnPoints, boolean spec) {
         this.spec = spec;
         l = spawnPoints;
-        list = new ArrayList<GamePlayer>();
+        list = new ArrayList<>();
     }
 
 
     public boolean isInTeam(GamePlayer arg) {
         return list.contains(arg);
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String n) {
@@ -46,12 +44,10 @@ public class GameTeam {
         Main.getGuic().subTeamCount(name);
     }
 
-    public boolean joinTeam(GamePlayer arg) {
+    public void joinTeam(GamePlayer arg) {
         list.add(arg);
         giveTeamChestPlate(arg);
         Main.getGuic().addTeamCount(name);
-
-        return true;
     }
 
     public void giveTeamChestPlate(GamePlayer arg) {
@@ -109,7 +105,7 @@ public class GameTeam {
         return spec;
     }
 
-    public int getPlyaerAmount() {
+    public int getPlayerAmount() {
         return list.size();
     }
 
