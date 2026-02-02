@@ -31,8 +31,24 @@ public class MySQLController {
     public void openConnection() {
         try {
             c = my.openConnection();
+            // 初始化数据库表
+            initializeDatabaseTables();
         } catch (ClassNotFoundException | SQLException e) {
             System.out.print("Connection error !");
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * 初始化数据库表
+     */
+    private void initializeDatabaseTables() {
+        try {
+            com.github.JHXSMatthew.Utils.DatabaseInitializer initializer = 
+                new com.github.JHXSMatthew.Utils.DatabaseInitializer(this, c);
+            initializer.initializeTables();
+        } catch (Exception e) {
+            System.err.println("[TheWalls] 数据库表初始化失败: " + e.getMessage());
             e.printStackTrace();
         }
     }

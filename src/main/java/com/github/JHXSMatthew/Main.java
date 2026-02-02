@@ -137,6 +137,7 @@ public class Main extends JavaPlugin {
             sql.openConnection();
 
             sender.sendMessage("    " + ChatColor.GREEN + "数据库管理器加载成功");
+            sender.sendMessage("    " + ChatColor.GREEN + "数据库表初始化完成");
             sender.sendMessage(ChatColor.AQUA + "-->加载监听器");
             getServer().getPluginManager().registerEvents(new BlockListener(), this);
             getServer().getPluginManager().registerEvents(new PlayerListener(), this);
