@@ -18,7 +18,14 @@ public class MySQLController {
     private Connection c = null;
 
     public MySQLController() {
-        this.my = new MySQL("192.168.123.2", "3306", "games", "game", "NO_PUBLIC_SECTION");
+        // 从配置文件获取数据库设置，如果不存在则使用默认值
+        String host = Main.getCon().getConfig().getString("mysql.host", "localhost");
+        String port = Main.getCon().getConfig().getString("mysql.port", "3306");
+        String database = Main.getCon().getConfig().getString("mysql.database", "games");
+        String username = Main.getCon().getConfig().getString("mysql.username", "root");
+        String password = Main.getCon().getConfig().getString("mysql.password", "");
+        
+        this.my = new MySQL(host, port, database, username, password);
     }
 
     public void openConnection() {

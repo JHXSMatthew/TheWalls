@@ -17,10 +17,22 @@ public class Config {
     private FileConfiguration config;
 
     public Config(FileConfiguration config) {
+        this.config = config;
+        
+        // 加载配置值，如果不存在则使用默认值
         FileSystem saveFile = new FileSystem("config", "TheWalls");
         lobby = saveFile.getLocation("lobby", true);
         isSetUp = saveFile.getBoolean("setUp");
-        this.config = config;
+        
+        // 加载经济相关配置
+        wimMoney = config.getInt("wimMoney", 30);
+        killMoney = config.getInt("killMoney", 5);
+        RealMoney = config.getInt("RealMoney", 2);
+        GAME_TO_SHUTDOWN = config.getInt("gameToShutdown", 5);
+    }
+    
+    public FileConfiguration getConfig() {
+        return config;
     }
 
 

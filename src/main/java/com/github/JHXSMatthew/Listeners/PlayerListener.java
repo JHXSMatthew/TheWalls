@@ -57,7 +57,16 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent evt) {
         Player player = evt.getPlayer(); // The player who joined
         GamePlayer p = Main.getPc().createGamePlayer(player);
-        Main.getGc().getGame().joinGame(p);
+        
+        if (Main.getGc().getGame() != null) {
+            Main.getGc().getGame().joinGame(p);
+        } else {
+            // 如果游戏未初始化，将玩家传送到大厅或发送错误消息
+            if (Main.getGc().getLobby() != null) {
+                player.teleport(Main.getGc().getLobby());
+            }
+            player.sendMessage(Message.prefix + ChatColor.RED + "服务器正在设置中，请稍后再试");
+        }
         evt.setJoinMessage("");
 
     }
@@ -285,7 +294,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void handleItemDrop(PlayerDropItemEvent evt) {
-        if (Main.getGc().getGame().getGameState().ordinal() < 2) {
+        if (Main.getGc().getGame() != null && Main.getGc().getGame().getGameState().ordinal() < 2) {
             evt.setCancelled(true);
         }
     }
@@ -325,7 +334,7 @@ public class PlayerListener implements Listener {
         }
 
         try {
-            if (!gamePlayer.notified && !gamePlayer.isSpec() && gamePlayer.getGame().getGameState() == GameState.WALL_NOT_FALL) {
+            if (!gamePlayer.notified && !gamePlayer.isSpec() && gamePlayer.getGame() != null && gamePlayer.getGame().getGameState() == GameState.WALL_NOT_FALL) {
                 gamePlayer.get().sendMessage(Message.prefix + Main.getMsg().getMessage("notify-chat-format1"));
                 gamePlayer.get().sendMessage(Message.prefix + Main.getMsg().getMessage("notify-chat-format2"));
                 gamePlayer.notified = true;

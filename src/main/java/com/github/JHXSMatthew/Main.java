@@ -95,7 +95,12 @@ public class Main extends JavaPlugin {
 
         logger.info("============ 战墙初始化 ============");
         sender.sendMessage(ChatColor.AQUA + "-->加载配置文件");
-        saveDefaultConfig();
+        // 保存默认配置文件
+        if (!new java.io.File(getDataFolder(), "config.yml").exists()) {
+            saveResource("config.yml", false);
+        }
+        reloadConfig(); // 确保加载最新配置
+        
         msg = new Message();
         sender.sendMessage("    " + ChatColor.GREEN + "成功加载消息");
         c = new Config(getConfig());

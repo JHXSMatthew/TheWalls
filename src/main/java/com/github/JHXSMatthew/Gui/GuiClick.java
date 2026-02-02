@@ -19,16 +19,32 @@ public class GuiClick implements Listener {
     public void excuteTask(Player p, int invID, int slot) {
         switch (this.guimanager.command.get(invID).get(slot)) {
             case "team0":
-                Main.getGc().getGame().changeTeamTo(p, 0);
+                if (Main.getGc().getGame() != null) {
+                    Main.getGc().getGame().changeTeamTo(p, 0);
+                } else {
+                    p.sendMessage(com.github.JHXSMatthew.Config.Message.prefix + org.bukkit.ChatColor.RED + "游戏未初始化");
+                }
                 break;
             case "team1":
-                Main.getGc().getGame().changeTeamTo(p, 1);
+                if (Main.getGc().getGame() != null) {
+                    Main.getGc().getGame().changeTeamTo(p, 1);
+                } else {
+                    p.sendMessage(com.github.JHXSMatthew.Config.Message.prefix + org.bukkit.ChatColor.RED + "游戏未初始化");
+                }
                 break;
             case "team2":
-                Main.getGc().getGame().changeTeamTo(p, 2);
+                if (Main.getGc().getGame() != null) {
+                    Main.getGc().getGame().changeTeamTo(p, 2);
+                } else {
+                    p.sendMessage(com.github.JHXSMatthew.Config.Message.prefix + org.bukkit.ChatColor.RED + "游戏未初始化");
+                }
                 break;
             case "team3":
-                Main.getGc().getGame().changeTeamTo(p, 3);
+                if (Main.getGc().getGame() != null) {
+                    Main.getGc().getGame().changeTeamTo(p, 3);
+                } else {
+                    p.sendMessage(com.github.JHXSMatthew.Config.Message.prefix + org.bukkit.ChatColor.RED + "游戏未初始化");
+                }
                 break;
             case "leave":
                 Main.getBc().quitSend(p);

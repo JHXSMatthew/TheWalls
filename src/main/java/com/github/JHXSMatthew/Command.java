@@ -38,7 +38,7 @@ public class Command implements CommandExecutor {
                 ChatColor.YELLOW+"/wall spawn 添加一个队伍出生点"+ChatColor.GRAY+"(顺序请按红,黄,蓝,绿)",
                 ChatColor.YELLOW+"/wall player <数量> 设置当前场地最大玩家数量",
                 ChatColor.YELLOW+"/wall walltime <时间/s> 设置墙倒塌前的时间",
-                ChatColor.YELLOW+"/wall percentage <0~1> ???",
+                ChatColor.YELLOW+"/wall percentage <0~1> 设置游戏开始所需玩家比例",
                 ChatColor.GRAY+"<>内内容为必填,[]内内容为选填",
                 ChatColor.AQUA+"===========(2/3)==========="
         );
@@ -99,7 +99,12 @@ public class Command implements CommandExecutor {
                 return true;
             }
             if(s1.equalsIgnoreCase("start")){
-                Main.getGc().getGame().switchState(GameState.WALL_NOT_FALL);
+                if (Main.getGc().getGame() != null) {
+                    Main.getGc().getGame().switchState(GameState.WALL_NOT_FALL);
+                    p.sendMessage("[§bTheWall§r]"+ChatColor.GREEN+"游戏已强制开始");
+                } else {
+                    p.sendMessage("[§bTheWall§r]"+ChatColor.RED+"错误：游戏未初始化，请先设置地图");
+                }
                 return true;
             }
             if(s1.equalsIgnoreCase("bound")){
@@ -217,11 +222,22 @@ public class Command implements CommandExecutor {
             }
 
 
-            //if(s1.equalsIgnoreCase("percentage")){
-            //    setMap.setPercentage(Float.parseFloat(args[1]));
-            //    p.sendMessage(args[1]);
-            //    return true;
-            //}
+            if(s1.equalsIgnoreCase("percentage")){
+                try {
+                    float percentage = Float.parseFloat(args[1]);
+                    if (percentage < 0.0f || percentage > 1.0f) {
+                        p.sendMessage("[§bTheWall§r]"+ChatColor.RED+"错误！百分比必须在0.0到1.0之间");
+                        return true;
+                    }
+                    setMap.setPercentage(percentage);
+                    p.sendMessage("[§bTheWall§r]"+ChatColor.GREEN+"百分比成功设置为: " + percentage);
+                    editor.setPercentage(true);
+                    editor.sendEditor(p);
+                } catch (NumberFormatException e) {
+                    p.sendMessage("[§bTheWall§r]"+ChatColor.RED+"错误！请输入有效的数字");
+                }
+                return true;
+            }
 
 
         }

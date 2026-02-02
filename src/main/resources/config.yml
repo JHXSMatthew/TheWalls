@@ -1,1 +1,25 @@
+# TheWalls 插件配置文件
+
+# 是否已完成设置 (不要手动修改)
 setUp: false
+
+# 经济设置
+wimMoney: 30          # 获胜奖励金币数
+killMoney: 5          # 击杀奖励金币数
+RealMoney: 2          # 实际游戏奖励金币数
+
+# 游戏设置
+gameToShutdown: 5     # 自动重启游戏场次数 (-1 表示不重启)
+
+# 数据库配置 (可选，如果不需要数据库功能可以留空)
+mysql:
+  host: "localhost"   # 数据库主机地址
+  port: "3306"        # 数据库端口
+  database: "games"   # 数据库名称
+  username: "root"    # 用户名
+  password: ""        # 密码
+
+# 其他配置选项
+settings:
+  enableStats: true   # 是否启用统计功能
+  enableMySQL: false  # 是否启用MySQL数据库 (设为false则使用本地文件存储)

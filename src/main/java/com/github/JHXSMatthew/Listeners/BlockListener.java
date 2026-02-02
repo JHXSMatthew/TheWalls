@@ -33,6 +33,11 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void onPistonExtension(BlockPistonExtendEvent evt) {
+        if (Main.getGc().getGame() == null) {
+            evt.setCancelled(true);
+            return;
+        }
+        
         for (Block b : evt.getBlocks()) {
             if (!Main.getGc().getGame().isBuildAllow(b.getLocation())) {
                 evt.setCancelled(true);
@@ -43,6 +48,11 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void onPistonRestrict(BlockPistonRetractEvent evt) {
+        if (Main.getGc().getGame() == null) {
+            evt.setCancelled(true);
+            return;
+        }
+        
         for (Block b : evt.getBlocks()) {
             if (!Main.getGc().getGame().isBuildAllow(b.getLocation())) {
                 evt.setCancelled(true);
@@ -54,6 +64,10 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void onEntityExplore(EntityExplodeEvent evt) {
+        if (Main.getGc().getGame() == null) {
+            return;
+        }
+        
         Iterator<Block> iter = evt.blockList().iterator();
         while (iter.hasNext()) {
             Location l = iter.next().getLocation();
@@ -70,7 +84,7 @@ public class BlockListener implements Listener {
         GamePlayer gp = Main.getPc().getGamePlayer(p);
         Game g = gp.getGame();
 
-        if (!g.isBuildAllow(evt.getBlock().getLocation())) {
+        if (g == null || !g.isBuildAllow(evt.getBlock().getLocation())) {
             evt.setCancelled(true);
             return;
         }
@@ -102,7 +116,7 @@ public class BlockListener implements Listener {
         Game g = gp.getGame();
 
 
-        if (!g.isBuildAllow(evt.getBlock().getLocation())) {
+        if (g == null || !g.isBuildAllow(evt.getBlock().getLocation())) {
             evt.setCancelled(true);
         }
     }
@@ -118,6 +132,11 @@ public class BlockListener implements Listener {
         Player p = evt.getPlayer();
         GamePlayer gp = Main.getPc().getGamePlayer(p);
         Game g = gp.getGame();
+
+        if (g == null) {
+            evt.setCancelled(true);
+            return;
+        }
 
         if (evt.getBlock().getState() instanceof Furnace) {
             if (g.getGameState() != 2) {
@@ -148,6 +167,10 @@ public class BlockListener implements Listener {
             GamePlayer gp = Main.getPc().getGamePlayer(p);
             Game g = gp.getGame();
 
+            if (g == null) {
+                evt.setCancelled(true);
+                return;
+            }
 
             if (g.getGameState() == 2 && !gp.isMyFur(l)) {
                 evt.setCancelled(true);

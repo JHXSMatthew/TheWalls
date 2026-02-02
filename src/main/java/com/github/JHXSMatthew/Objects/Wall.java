@@ -30,6 +30,12 @@ public class Wall {
 
     public void setFallen() {
         World world = up.getWorld();
+        
+        // 检查游戏是否存在
+        if (Main.getGc().getGame() == null) {
+            return; // 如果游戏不存在，则不执行任何操作
+        }
+        
         if (horizontal) {
             int small_x = smaller(down.getBlockX(), up.getBlockX());
             int big_x = bigger(down.getBlockX(), up.getBlockX());

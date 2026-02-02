@@ -17,7 +17,7 @@ public class ClickItem implements Listener {
     public void onClick(PlayerInteractEvent evt) {
 
         if (evt.getItem() != null) {
-            if (Main.getGc().getGame() != null || Main.getGc().getGame().getGameState() < 2) {
+            if (Main.getGc().getGame() == null || Main.getGc().getGame().getGameState().ordinal() < 2) {
 
 
                 //	System.out.print("Item not Null");
