@@ -18,7 +18,7 @@ public class Editor {
         Bound = false;
         PlayerCount = false;
         Walltime = false;
-        Percentage = true;
+        Percentage = false;  // 修复：默认应该是false，表示未设置
         Lobby = false;
         Builder = false;
         Wall = 0;
@@ -43,6 +43,10 @@ public class Editor {
         }else {
             return "§c未完成";
         }
+    }
+    
+    public void setPercentage(boolean percentage) {
+        Percentage = percentage;
     }
 
 }
